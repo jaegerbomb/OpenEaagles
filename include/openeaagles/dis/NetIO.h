@@ -374,7 +374,7 @@ protected:
    virtual void testInputEntityTypes(const unsigned int);    // Test quick lookup of incoming entity types
 
 private:
-    void checkDetonationManually(WorldCoordinates wc);
+    void checkDetonationManually(const DetonationPDU* const pdu) const;
     void initData();
 
     SPtr<Basic::NetHandler>   netInput;          // Input network handler
