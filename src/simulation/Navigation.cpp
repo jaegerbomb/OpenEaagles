@@ -512,6 +512,12 @@ Route* Navigation::getPriRoute()
    return priRoute;
 }
 
+Route* Navigation::getPriRoutePreRef()
+{
+   return priRoute.getRefPtr();
+}
+
+
 // Returns the primary route (const version)
 const Route* Navigation::getPriRoute() const
 {
@@ -762,8 +768,11 @@ bool Navigation::updateSysVelocity()
 // (default) Nav steering function (pull data from the 'to' steerpoint)
 bool Navigation::updateNavSteering()
 {
-   if (getPriRoute() != 0) {
-      const Steerpoint* to = getPriRoute()->getSteerpoint();
+   // in the rare case in which we get reset while running the time critical phases, hold onto the
+   // primary route for this iteration
+   Route* rte = getPriRoutePreRef();
+   if (rte != 0) {
+      const Steerpoint* to = rte->getSteerpoint();
       if (to != 0) {
          if (to->isNavDataValid()) {
             setTrueBrgDeg( to->getTrueBrgDeg() );
@@ -780,6 +789,7 @@ bool Navigation::updateNavSteering()
             setNavSteeringValid( false );
          }
       }
+      rte->unref();
    }
    return isNavSteeringValid();
 }

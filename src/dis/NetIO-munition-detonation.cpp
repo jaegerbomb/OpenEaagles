@@ -16,6 +16,10 @@
 #include "openeaagles/basic/Pair.h"
 #include "openeaagles/basic/PairStream.h"
 
+#include "openeaagles\simulation\Station.h"
+#include "openeaagles\simulation\Simulation.h"
+#include "openeaagles\simulation\Missile.h"
+
 namespace Eaagles {
 namespace Network {
 namespace Dis {
@@ -150,6 +154,52 @@ void NetIO::processDetonationPDU(const DetonationPDU* const pdu)
    // ---
    if (mPlayer != 0) {
       mPlayer->checkDetonationEffect();
+   }
+   // NO player was found, let's try to use world coordinates!
+   else {
+      checkDetonationManually(pdu->location);
+   }
+}
+
+void NetIO::checkDetonationManually(WorldCoordinates wc)
+{
+   osg::Vec3d worldPos(wc.X_coord, wc.Y_coord, wc.Z_coord);
+   Simulation::Station* stn = getStation();
+   if (stn != 0) {
+      Simulation::Simulation* sim = stn->getSimulation();
+      if (sim != 0) {
+         // right now, let's just say the max burst range is manual at 500ft
+         LCreal maxRng = 10.0f * 500.0f;
+         Basic::PairStream* plist = sim->getPlayers();
+         if (plist != 0) {
+            Basic::List::Item* item = plist->getFirstItem();
+            // Process the detonation for all local, in-range players
+            bool finished = false;
+            while (item != 0 && !finished) {
+               Basic::Pair* pair = static_cast<Basic::Pair*>(item->getValue());
+               Simulation::Player* p = static_cast<Simulation::Player*>(pair->object()); 
+               finished = p->isNetworkedPlayer();  // local only
+               if (!finished) {
+                  const osg::Vec3d dPos = p->getGeocPosition() - worldPos;
+                  LCreal rng = dPos.length();
+                  if ( (rng <= maxRng) ) {
+                      // make a fake weapon that has the correct parameters - the correct way is to look
+                      // it up by DIS enumeration
+                      Simulation::Missile* wpn = new Simulation::Missile();
+                      wpn->setMaxBurstRng(500);
+                      wpn->setLethalRange(500);
+
+                      p->processDetonation(rng, wpn);
+                      wpn->unref();
+                  }
+               }
+               item = item->getNext();
+            }
+         }
+         // cleanup
+         plist->unref();
+         plist = 0;
+      }
    }
 }
 

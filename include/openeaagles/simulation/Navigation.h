@@ -114,6 +114,7 @@ public:
     // Primary route
    virtual Route* getPriRoute();                            // Returns the primary route (non-const version)
    virtual const Route* getPriRoute() const;                // Returns the primary route (const version)
+   virtual Route* getPriRoutePreRef();                      // Safe return (pre-refd) primary route
 
     // Bullseye
    virtual Bullseye* getBullseye();                         // Returns the current bullseye (non-const version)

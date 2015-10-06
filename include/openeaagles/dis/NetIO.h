@@ -8,6 +8,7 @@
 #define __Eaagles_Network_Dis_NetIO_H__
 
 #include "openeaagles/simulation/NetIO.h"
+#include "structs.h"
 
 namespace Eaagles {
    namespace Basic { class NetHandler; }
@@ -373,6 +374,7 @@ protected:
    virtual void testInputEntityTypes(const unsigned int);    // Test quick lookup of incoming entity types
 
 private:
+    void checkDetonationManually(WorldCoordinates wc);
     void initData();
 
     SPtr<Basic::NetHandler>   netInput;          // Input network handler
