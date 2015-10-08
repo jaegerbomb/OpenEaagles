@@ -199,6 +199,7 @@ void NetIO::checkDetonationManually(const DetonationPDU* const pdu) const
                   std::cout << "Weapon type = " << *cWpn->getType() << std::endl;
                   std::cout << "Max Burst Range = " << maxBurstRange << std::endl;
                   std::cout << "Lethal Range = " << cWpn->getLethalRange() << std::endl;
+
                }
                // not a weapon, but instead a player - just make up numbers!
                else {
