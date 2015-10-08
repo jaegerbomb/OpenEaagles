@@ -167,7 +167,6 @@ void NetIO::processDetonationPDU(const DetonationPDU* const pdu)
 
 void NetIO::checkDetonationManually(const DetonationPDU* const pdu) const
 {
-
    if (pdu == 0) return;
    osg::Vec3d worldPos(pdu->location.X_coord, pdu->location.Y_coord, pdu->location.Z_coord);
    const Simulation::Station* stn = getStation();
@@ -175,6 +174,11 @@ void NetIO::checkDetonationManually(const DetonationPDU* const pdu) const
       const Simulation::Simulation* sim = stn->getSimulation();
       if (sim != 0) {
          Simulation::Weapon* cWpn = 0;
+         // We are going to kluge this for speed... we need to tell the player that this is a 
+         // manual detonation with no weapon attached - but it always has a weapon to look at
+         // (in processDetonation).  So, we will make the dummy flag true to tell the derived
+         // player that we are indeed a made up weapon, and the weapon's position will be in world
+         // coordinates instead of relative position.
          // default weapon parameters (not very deadly)
          LCreal maxBurstRange = 25.0f;
          LCreal maxLethalRange = 0.5;
@@ -184,7 +188,7 @@ void NetIO::checkDetonationManually(const DetonationPDU* const pdu) const
             pdu->burst.munition.category, pdu->burst.munition.subcategory, 
             pdu->burst.munition.specific, pdu->burst.munition.extra);
 
-         std::cout << "NetIO::checkDetonationManuall - weapon parameters:" << std::endl;
+         std::cout << "NetIO::checkDetonationManually - weapon parameters:" << std::endl;
          std::cout << "<Kind, Domain, Country, Category, SubCategory, Specific, Extra>:" << std::endl;
          std::cout << static_cast<unsigned>(pdu->burst.munition.kind) << ", " << static_cast<unsigned>(pdu->burst.munition.domain) << ", " 
             << pdu->burst.munition.country << ", " << static_cast<unsigned>(pdu->burst.munition.category) << ", " 
@@ -195,11 +199,14 @@ void NetIO::checkDetonationManually(const DetonationPDU* const pdu) const
             if (ply != 0) {
                cWpn = dynamic_cast<Simulation::Weapon*>(ply);
                if (cWpn != 0) {
+                  cWpn->ref();
                   maxBurstRange = cWpn->getMaxBurstRng();
+                  cWpn->setDummy(true);
+                  cWpn->container((Basic::Component*)sim);
+                  cWpn->setGeocPosition(worldPos, true);
                   std::cout << "Weapon type = " << *cWpn->getType() << std::endl;
                   std::cout << "Max Burst Range = " << maxBurstRange << std::endl;
                   std::cout << "Lethal Range = " << cWpn->getLethalRange() << std::endl;
-
                }
                // not a weapon, but instead a player - just make up numbers!
                else {
@@ -224,16 +231,21 @@ void NetIO::checkDetonationManually(const DetonationPDU* const pdu) const
                Simulation::Player* p = (Simulation::Player*)pair->object(); 
                finished = p->isNetworkedPlayer();  // local only
                if (!finished) {
-                  const osg::Vec3d dPos = p->getGeocPosition() - worldPos;
+                  // take out the altitude component of it for now
+                  const osg::Vec2d flatPos(worldPos.x(), worldPos.y());
+                  const osg::Vec2d flatPlayerPos(p->getGeocPosition().x(),  p->getGeocPosition().y());
+                  const osg::Vec2d dPos = flatPlayerPos - flatPos;
                   LCreal rng = dPos.length();
                   if ( (rng <= maxRng) ) {
                      // default, make our own weapon
                      if (cWpn == 0) {
-                        Simulation::Missile* wpn = new Simulation::Missile();
-                        wpn->setMaxBurstRng(maxBurstRange);
-                        wpn->setLethalRange(maxLethalRange);
-                        p->processDetonation(rng, wpn);
-                        wpn->unref();
+                        cWpn = new Simulation::Missile();
+                        cWpn->setMaxBurstRng(maxBurstRange);
+                        cWpn->setLethalRange(maxLethalRange);
+                        cWpn->setDummy(true);
+                        cWpn->container((Basic::Component*)sim);
+                        cWpn->setGeocPosition(worldPos, true);
+                        p->processDetonation(rng, cWpn);
                      }
                      else {
                         p->processDetonation(rng, cWpn);
@@ -245,6 +257,11 @@ void NetIO::checkDetonationManually(const DetonationPDU* const pdu) const
          }
          plist->unref();
          plist = 0;
+         if (cWpn != 0) {
+            cWpn->container(0);
+            cWpn->unref();
+            cWpn = 0;
+         }
       }
    }
 }
