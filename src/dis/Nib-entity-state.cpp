@@ -522,6 +522,10 @@ bool Nib::entityStateManager(const LCreal curExecTime)
          // Entity location (WorldCoordinates)
          // ---
          osg::Vec3d geocPos = getDrPosition();
+         if (geocPos.x() == 0 && geocPos.y() == 0) {
+            return true;
+         }
+
          pdu->entityLocation.X_coord = geocPos[Basic::Nav::IX];
          pdu->entityLocation.Y_coord = geocPos[Basic::Nav::IY];
          pdu->entityLocation.Z_coord = geocPos[Basic::Nav::IZ];
@@ -866,6 +870,21 @@ unsigned char Nib::manageArticulationParameters(EntityStatePDU* const pdu)
             ap++;
          }
       }
+   }
+   // ---
+   // Life Form articulated parts and attachments
+   // ---
+   else if ( getPlayer()->isMajorType(Simulation::Player::LIFE_FORM) ) {
+      // fill the articulation parameter structure
+      ap->parameterTypeDesignator = VpArticulatedPart::ARTICULATED_PART;
+      ap->changeIndicator = (unsigned char) (getAPartWingSweepCnt() & 0xff);
+      ap->id = 0;
+      ap->parameterType = (VpArticulatedPart::WING_SWEEP + VpArticulatedPart::AZIMUTH);
+      ap->parameterValue.value[0] = (float) getAPartWingSweep();  // radians
+      ap->parameterValue.value[1] = 0;
+      // Update part count & pointer
+      cnt++;
+      ap++;
    }
 
    return cnt;

@@ -4349,6 +4349,8 @@ Basic::Object* Player::getSlotByIndex(const int si)
 //------------------------------------------------------------------------------
 std::ostream& Player::serialize(std::ostream& sout, const int i, const bool slotsOnly) const
 {
+   if ( isNetworkedPlayer() ) return sout;
+
    int j = 0;
    if ( !slotsOnly ) {
       sout << std::endl;

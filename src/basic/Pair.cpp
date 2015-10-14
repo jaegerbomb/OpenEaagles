@@ -3,6 +3,7 @@
 #include "openeaagles/basic/Float.h"
 #include "openeaagles/basic/Boolean.h"
 #include "openeaagles/basic/String.h"
+#include "openeaagles\simulation\Player.h"
 
 namespace Eaagles {
 namespace Basic {
@@ -84,6 +85,15 @@ bool Pair::isValid() const
 //------------------------------------------------------------------------------
 std::ostream& Pair::serialize(std::ostream& sout, const int indent, const bool) const
 {
+   const Object* obj = object();
+   if (obj == 0) {
+      sout << "<null>";
+      return sout;
+   }
+
+   const Simulation::Player* ply = dynamic_cast<const Simulation::Player*>(obj);
+   if (ply != 0 && ply->isNetworkedPlayer()) return sout;
+   
    if (slot() != 0 && !slot()->isEmpty()) {
       sout << slot()->getString();
    }
@@ -94,11 +104,8 @@ std::ostream& Pair::serialize(std::ostream& sout, const int indent, const bool) 
 
    //sout << endl;
 
-   const Object* obj = object();
-   if (obj != 0) {
-      obj->serialize(sout,indent);
-   }
-   else sout << "<null>";
+   obj->serialize(sout,indent);
+   //else sout << "<null>";
    sout << std::endl;
 
    return sout;
