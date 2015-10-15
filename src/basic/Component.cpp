@@ -1246,10 +1246,10 @@ std::ostream& Component::serialize(std::ostream& sout, const int i, const bool s
     }
 
     // Freeze
-    if (isFrozen()) {
-        indent(sout,i+j);
-        sout << "freeze: " << isFrozen() << std::endl;
-    }
+    //if (isFrozen()) {
+    //    indent(sout,i+j);
+    //    sout << "freeze: " << isFrozen() << std::endl;
+    //}
 
     {
       unsigned short bits = getMessageEnableBits();
