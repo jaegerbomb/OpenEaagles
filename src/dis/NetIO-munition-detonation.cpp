@@ -232,9 +232,9 @@ void NetIO::checkDetonationManually(const DetonationPDU* const pdu) const
                finished = p->isNetworkedPlayer();  // local only
                if (!finished) {
                   // take out the altitude component of it for now
-                  const osg::Vec2d flatPos(worldPos.x(), worldPos.y());
-                  const osg::Vec2d flatPlayerPos(p->getGeocPosition().x(),  p->getGeocPosition().y());
-                  const osg::Vec2d dPos = flatPlayerPos - flatPos;
+                  //const osg::Vec2d flatPos(worldPos.x(), worldPos.y());
+                  //const osg::Vec2d flatPlayerPos(p->getGeocPosition().x(),  p->getGeocPosition().y());
+                  const osg::Vec3d dPos = p->getGeocPosition() - worldPos;
                   LCreal rng = dPos.length();
                   if ( (rng <= maxRng) ) {
                      // default, make our own weapon
