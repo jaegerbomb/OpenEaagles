@@ -879,9 +879,9 @@ unsigned char Nib::manageArticulationParameters(EntityStatePDU* const pdu)
       ap->parameterTypeDesignator = VpArticulatedPart::ARTICULATED_PART;
       ap->changeIndicator = (unsigned char) (getAPartWingSweepCnt() & 0xff);
       ap->id = 0;
-      ap->parameterType = (VpArticulatedPart::WING_SWEEP + VpArticulatedPart::AZIMUTH);
-      ap->parameterValue.value[0] = (float) getAPartWingSweep();  // radians
-      ap->parameterValue.value[1] = 0;
+      ap->parameterType = (VpArticulatedPart::TURRET_ELEVATION);
+      ap->parameterValue.value[0] = 0.0f;  // radians
+      ap->parameterValue.value[1] = 0.0f;
       // Update part count & pointer
       cnt++;
       ap++;

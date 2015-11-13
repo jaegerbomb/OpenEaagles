@@ -1683,6 +1683,11 @@ struct VpArticulatedPart {
       ROTATION_RATE = 16
    };
 
+   // LIFE Force
+   enum {
+      TURRET_ELEVATION = 4429
+   };
+
    // data structure
    uint8_t  parameterTypeDesignator;
    uint8_t  changeIndicator;
