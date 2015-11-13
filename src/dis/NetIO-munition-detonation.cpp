@@ -91,64 +91,80 @@ void NetIO::processDetonationPDU(const DetonationPDU* const pdu)
    // ---
    Simulation::Weapon* mPlayer = 0;
    if (mNib != 0) {
+      std::cout << "<Kind, Domain, Country, Category, SubCategory, Specific, Extra>:" << std::endl;
+      std::cout << static_cast<unsigned>(pdu->burst.munition.kind) << ", " << static_cast<unsigned>(pdu->burst.munition.domain) << ", " 
+         << pdu->burst.munition.country << ", " << static_cast<unsigned>(pdu->burst.munition.category) << ", " 
+         << static_cast<unsigned>(pdu->burst.munition.subcategory) << ", " << static_cast<unsigned>(pdu->burst.munition.specific) << ", " 
+         << static_cast<unsigned>(pdu->burst.munition.extra) << std::endl;
 
-      // ---
-      // a) Set the munition's NIB to the location of the detonation
-      // ---
 
-      // Get the geocentric position, velocity and acceleration from the PDU
-      osg::Vec3d geocPos;
-      geocPos[Basic::Nav::IX] = pdu->location.X_coord;
-      geocPos[Basic::Nav::IY] = pdu->location.Y_coord;
-      geocPos[Basic::Nav::IZ] = pdu->location.Z_coord;
+      if (pdu->burst.munition.extra == 200) {
+         checkDetonationManually(pdu);
+      }
+      else {
+         // ---
+         // a) Set the munition's NIB to the location of the detonation
+         // ---
 
-      osg::Vec3d geocVel;
-      geocVel[Basic::Nav::IX] = pdu->velocity.component[0];
-      geocVel[Basic::Nav::IY] = pdu->velocity.component[1];
-      geocVel[Basic::Nav::IZ] = pdu->velocity.component[2];
+         // Get the geocentric position, velocity and acceleration from the PDU
+         osg::Vec3d geocPos;
+         geocPos[Basic::Nav::IX] = pdu->location.X_coord;
+         geocPos[Basic::Nav::IY] = pdu->location.Y_coord;
+         geocPos[Basic::Nav::IZ] = pdu->location.Z_coord;
 
-      osg::Vec3d geocAcc(0,0,0);
-      osg::Vec3d geocAngles(0,0,0);
-      osg::Vec3d arates(0,0,0);
+         osg::Vec3d geocVel;
+         geocVel[Basic::Nav::IX] = pdu->velocity.component[0];
+         geocVel[Basic::Nav::IY] = pdu->velocity.component[1];
+         geocVel[Basic::Nav::IZ] = pdu->velocity.component[2];
 
-      // (re)initialize the dead reckoning function
-      mNib->resetDeadReckoning(
-         Simulation::Nib::STATIC_DRM,
-         geocPos,
-         geocVel,
-         geocAcc,
-         geocAngles,
-         arates);
+         osg::Vec3d geocAcc(0,0,0);
+         osg::Vec3d geocAngles(0,0,0);
+         osg::Vec3d arates(0,0,0);
 
-      // Set the NIB's mode to DETONATED
-      mNib->setMode(Simulation::Player::DETONATED);
+         // (re)initialize the dead reckoning function
+         mNib->resetDeadReckoning(
+            Simulation::Nib::STATIC_DRM,
+            geocPos,
+            geocVel,
+            geocAcc,
+            geocAngles,
+            arates);
 
-      // Find the munition player and set its mode, location and target position
-      mPlayer = dynamic_cast<Simulation::Weapon*>(mNib->getPlayer());
-      if (mPlayer != 0) {
+         // Set the NIB's mode to DETONATED
+         mNib->setMode(Simulation::Player::DETONATED);
 
-         // Munition's mode
-         mPlayer->setMode(Simulation::Player::DETONATED);
+         // Find the munition player and set its mode, location and target position
+         mPlayer = dynamic_cast<Simulation::Weapon*>(mNib->getPlayer());
+         if (mPlayer != 0) {
 
-         // munition's position, velocity and acceleration at the time of the detonation
-         mPlayer->setGeocPosition(geocPos);
-         mPlayer->setGeocVelocity(geocVel);
-         mPlayer->setGeocAcceleration(geocAcc);
+            // Munition's mode
+            mPlayer->setMode(Simulation::Player::DETONATED);
 
-         // detonation results
-         mPlayer->setDetonationResults(Simulation::Weapon::Detonation(pdu->detonationResult));
+            // munition's position, velocity and acceleration at the time of the detonation
+            mPlayer->setGeocPosition(geocPos);
+            mPlayer->setGeocVelocity(geocVel);
+            mPlayer->setGeocAcceleration(geocAcc);
 
-         // Munition's target player and the location of detonation relative to target
-         mPlayer->setTargetPlayer(tPlayer,false);
-         LCreal x = pdu->locationInEntityCoordinates.component[0];
-         LCreal y = pdu->locationInEntityCoordinates.component[1];
-         LCreal z = pdu->locationInEntityCoordinates.component[2];
-         osg::Vec3 loc(x,y,z);
-         mPlayer->setDetonationLocation(loc);
+            // detonation results
+            mPlayer->setDetonationResults(Simulation::Weapon::Detonation(pdu->detonationResult));
+         
+            // Munition's target player and the location of detonation relative to target
+            mPlayer->setTargetPlayer(tPlayer,false);
+            LCreal x = pdu->locationInEntityCoordinates.component[0];
+            LCreal y = pdu->locationInEntityCoordinates.component[1];
+            LCreal z = pdu->locationInEntityCoordinates.component[2];
+            osg::Vec3 loc(x,y,z);
+            mPlayer->setDetonationLocation(loc);
 
-         // Munition's launcher
-         if (mPlayer->getLaunchVehicle() == 0 && fPlayer != 0) {
-            mPlayer->setLaunchVehicle(fPlayer);
+            // Munition's launcher
+            if (mPlayer->getLaunchVehicle() == 0 && fPlayer != 0) {
+               mPlayer->setLaunchVehicle(fPlayer);
+            }
+
+            std::cout << "Weapon type = " << *mPlayer->getType() << std::endl;
+            std::cout << "Max Burst Range = " << mPlayer->getMaxBurstRng() << std::endl;
+            std::cout << "Lethal Range = " << mPlayer->getLethalRange() << std::endl;
+
          }
       }
    }
