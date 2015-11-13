@@ -275,6 +275,7 @@ bool NetIO::shutdownNotification()
 // getCurrentTime() -- Returns the current time from the selected source
 double NetIO::getCurrentTime()
 {
+   if (getSimulation() == 0) return 0;
     if (getTimeline() == UTC) return getSimulation()->getSysTimeOfDay();
     else return getSimulation()->getExecTimeSec();
 }
@@ -464,6 +465,7 @@ bool NetIO::networkInitialization()
 //------------------------------------------------------------------------------
 void NetIO::cleanupInputList()
 {
+   if (getSimulation() == 0) return;
    // Current exec time
    const double curExecTime = getSimulation()->getExecTimeSec();
 
@@ -540,6 +542,7 @@ void NetIO::updateOutputList()
       // --- ---
       if ( isOutputEnabled() ) {
 
+         if (getSimulation() == 0) return;
          // Get the player list pointer (pre-ref()'d)
          Basic::PairStream* players = getSimulation()->getPlayers();
 
@@ -612,6 +615,7 @@ void NetIO::processOutputList()
    for (unsigned int idx = 0; idx < getOutputListSize(); idx++) {
 
       Nib* nib = getOutputNib(idx);
+      if (getSimulation() == 0) return;
       double curExecTime = getSimulation()->getExecTimeSec();
 
       if (nib->isEntityTypeValid()) {
@@ -1439,6 +1443,10 @@ std::ostream& NetIO::serialize(std::ostream& sout, const int i, const bool slots
    return sout;
 }
 
+void NetIO::setSimulation(Simulation* sim) 
+{
+     simulation = sim; 
+}
 
 
 
@@ -1853,6 +1861,7 @@ bool NtmOutputNodeStd::addNtmSorted(Ntm* const newNtm)
 
    return ok;
 }
+
 
 //------------------------------------------------------------------------------
 // print our data and our subnodes

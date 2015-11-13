@@ -381,6 +381,10 @@ public:
       virtual void print(std::ostream& sout, const int icnt=0) const =0;
    };
 
+   // Lee - quick fixes
+   virtual void enableInput()    { inputFlg = true; }
+   virtual void setSimulation(Simulation* sim);
+
 protected:
    virtual bool addOutputEntityType(Ntm* const item);          // Adds an item to the output entity type table
    virtual bool addInputEntityType(Ntm* const item);           // Adds an item to the input entity type table
