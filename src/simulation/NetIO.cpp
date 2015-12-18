@@ -545,47 +545,50 @@ void NetIO::updateOutputList()
          if (getSimulation() == 0) return;
          // Get the player list pointer (pre-ref()'d)
          Basic::PairStream* players = getSimulation()->getPlayers();
+         
+         
+         if (players != 0) {
+            // For all players
+            bool finished = false;
+            unsigned int newCount = 0;
+            Basic::List::Item* playerItem = players->getFirstItem();
+            while (playerItem != 0 && !finished) {
 
-         // For all players
-         bool finished = false;
-         unsigned int newCount = 0;
-         Basic::List::Item* playerItem = players->getFirstItem();
-         while (playerItem != 0 && !finished) {
+               // Get player list items
+               Basic::Pair* playerPair = static_cast<Basic::Pair*>(playerItem->getValue());
+               Player* player = static_cast<Player*>(playerPair->object());
 
-            // Get player list items
-            Basic::Pair* playerPair = static_cast<Basic::Pair*>(playerItem->getValue());
-            Player* player = static_cast<Player*>(playerPair->object());
+               if (player->isLocalPlayer() || (isRelayEnabled() && player->getNetworkID() != getNetworkID()))  {
+                  if (player->isActive() && player->isNetOutputEnabled()) {
 
-            if (player->isLocalPlayer() || (isRelayEnabled() && player->getNetworkID() != getNetworkID()) )  {
-               if ( player->isActive() && player->isNetOutputEnabled()) {
+                     // We have (1) an active local player to output or
+                     //         (2) an active networked player to relay ...
 
-                  // We have (1) an active local player to output or
-                  //         (2) an active networked player to relay ...
+                     // Find the output NIB for this player
+                     Nib* nib = findNib(player, OUTPUT_NIB);
+                     if (nib == 0 && newCount < MAX_NEW_OUTGOING) {
+                        // Not Found then create a new output NIB for this player
+                        nib = insertNewOutputNib(player);
+                        newCount++;
+                     }
 
-                  // Find the output NIB for this player
-                  Nib* nib = findNib(player, OUTPUT_NIB);
-                  if (nib == 0 && newCount < MAX_NEW_OUTGOING) {
-                     // Not Found then create a new output NIB for this player
-                     nib = insertNewOutputNib( player );
-                     newCount++;
-                  }
-
-                  // Mark this NIB as checked
-                  if (nib != 0) {
-                     nib->setCheckedFlag(true);
+                     // Mark this NIB as checked
+                     if (nib != 0) {
+                        nib->setCheckedFlag(true);
+                     }
                   }
                }
-            }
-            else {
-               // Finished with local players and we're not relaying
-               finished = !isRelayEnabled();
+               else {
+                  // Finished with local players and we're not relaying
+                  finished = !isRelayEnabled();
+               }
+
+               // get the next player
+               playerItem = playerItem->getNext();
             }
 
-            // get the next player
-            playerItem = playerItem->getNext();
+            players->unref();
          }
-
-         players->unref();
       }
 
       // ---
