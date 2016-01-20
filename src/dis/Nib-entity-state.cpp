@@ -543,7 +543,7 @@ bool Nib::entityStateManager(const LCreal curExecTime)
       // Appearance bits generic to all domains (except munitions)
       // ---
       {
-         pdu->appearance = 0x0;
+         pdu->appearance = 0x00000000;
 
          // ---
          // Frozen?
@@ -575,8 +575,8 @@ bool Nib::entityStateManager(const LCreal curExecTime)
          {
             unsigned int bits = getCamouflageType();
             if (bits > 0 && bits <= 4) {
+               std::cout << "CAMO" << std::endl;
                pdu->appearance |= CAMOUFLAGE_BIT;
-
                // Land based camouflage bits
                if (player->isMajorType(Simulation::Player::GROUND_VEHICLE)) {
                   // Subtract one to match DIS camouflage bits.
@@ -600,26 +600,30 @@ bool Nib::entityStateManager(const LCreal curExecTime)
                // bits 13-15 unused
                // bits 16 - 19 life form state
                // data is from the player, because NIB doesn't have actions associated with it
-               {
-                  unsigned int bits = 1;      // upright, standing still
-                  if (lf->getActionState() == Simulation::LifeForm::UPRIGHT_STANDING) bits = 1;       // standing
-                  else if (lf->getActionState() == Simulation::LifeForm::UPRIGHT_WALKING) bits = 2;   // walking
-                  else if (lf->getActionState() == Simulation::LifeForm::UPRIGHT_RUNNING) bits = 3;   // running
-                  else if (lf->getActionState() == Simulation::LifeForm::KNEELING) bits = 4;          // kneeling
-                  else if (lf->getActionState() == Simulation::LifeForm::PRONE) bits = 5;             // prone
-                  else if (lf->getActionState() == Simulation::LifeForm::CRAWLING) bits = 6;          // crawling
-                  else if (lf->getActionState() == Simulation::LifeForm::SWIMMING) bits = 7;          // swimming
-                  else if (lf->getActionState() == Simulation::LifeForm::PARACHUTING) bits = 8;       // parachuting
-                  else if (lf->getActionState() == Simulation::LifeForm::JUMPING) bits = 9;           // jumping
-                  else if (lf->getActionState() == Simulation::LifeForm::SITTING) bits = 10;          // sitting
-                  else if (lf->getActionState() == Simulation::LifeForm::SQUATTING) bits = 11;        // squatting
-                  else if (lf->getActionState() == Simulation::LifeForm::CROUCHING) bits = 12;        // crouching
-                  else if (lf->getActionState() == Simulation::LifeForm::WADING) bits = 13;           // wading
-                  else if (lf->getActionState() == Simulation::LifeForm::SURRENDER) bits = 14;        // surrender
-                  else if (lf->getActionState() == Simulation::LifeForm::DETAINED) bits = 15;         // detained
-                  else bits = 1;
+               unsigned int bits = 0;      // upright, standing still
+               if (lf->getActionState() == Simulation::LifeForm::UPRIGHT_STANDING) bits = 1;       // standing
+               else if (lf->getActionState() == Simulation::LifeForm::UPRIGHT_WALKING) bits = 2;   // walking
+               else if (lf->getActionState() == Simulation::LifeForm::UPRIGHT_RUNNING) bits = 3;   // running
+               else if (lf->getActionState() == Simulation::LifeForm::KNEELING) bits = 4;          // kneeling
+               else if (lf->getActionState() == Simulation::LifeForm::PRONE) bits = 5;             // prone
+               else if (lf->getActionState() == Simulation::LifeForm::CRAWLING) bits = 6;          // crawling
+               else if (lf->getActionState() == Simulation::LifeForm::SWIMMING) bits = 7;          // swimming
+               else if (lf->getActionState() == Simulation::LifeForm::PARACHUTING) bits = 8;       // parachuting
+               else if (lf->getActionState() == Simulation::LifeForm::JUMPING) bits = 9;           // jumping
+               else if (lf->getActionState() == Simulation::LifeForm::SITTING) bits = 10;          // sitting
+               else if (lf->getActionState() == Simulation::LifeForm::SQUATTING) bits = 11;        // squatting
+               else if (lf->getActionState() == Simulation::LifeForm::CROUCHING) bits = 12;        // crouching
+               else if (lf->getActionState() == Simulation::LifeForm::WADING) bits = 13;           // wading
+               else if (lf->getActionState() == Simulation::LifeForm::SURRENDER) bits = 14;        // surrender
+               else if (lf->getActionState() == Simulation::LifeForm::DETAINED) bits = 15;         // detained
+               if (bits != 0) {
                   pdu->appearance |= (bits << 16);
                }
+               else {
+                  bits = player->getCustomAppearanceBits();
+                  pdu->appearance |= bits;
+               }
+
                // bit 20 unused
                // bit 21 frozen status (taken care of above)
                // bits 24 - 25 weapon 1 (not implemented)
@@ -650,8 +654,6 @@ bool Nib::entityStateManager(const LCreal curExecTime)
             // Power plant status bit (just leave ON for now)
             pdu->appearance |= POWER_PLANT_BIT;
          }
-
-
       }
 
       // ---

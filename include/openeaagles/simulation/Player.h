@@ -1004,6 +1004,10 @@ public:
    virtual bool setSlotTestYawRate(const Basic::Angle* const msg);
    virtual bool setSlotTestBodyAxis(const Basic::Number* const msg);
 
+   // Special function to update appearance bits that are special to the player (ie.. unused bits or the like)
+   // This currently is only used for LifeForm types.
+   virtual unsigned int getCustomAppearanceBits() const { return 0; };
+
    // ---
    // Basic::Component interface
    // ---

@@ -141,16 +141,15 @@ void LifeForm::fire()
 bool LifeForm::setVelocity(const LCreal ue, const LCreal ve, const LCreal we)
 {
     bool ok = BaseClass::setVelocity(ue, ve, we);
-    // based on our velocity, we will run or walk, or stand still
-    LCreal tempX = lcAbs(ue);
-    LCreal tempY = lcAbs(ve);
+
+    double vel = getTotalVelocity();
     
     // we only change our appearance bit if we are parachuting
     if (actionState != PARACHUTING) {    
         // test for running and walking
-        if (tempX == 0 && tempY == 0) actionState = UPRIGHT_STANDING;
-        if (tempX > 0 || tempY > 0) actionState = UPRIGHT_WALKING;
-        if (tempX > 8 || tempY > 8) actionState = UPRIGHT_RUNNING; 
+        if (vel <= 0)  actionState = UPRIGHT_STANDING;
+        else if (vel <= 2.6) actionState = UPRIGHT_WALKING;
+        else actionState = UPRIGHT_RUNNING; 
     }
 
     return ok;
