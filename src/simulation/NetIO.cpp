@@ -50,6 +50,7 @@ const double NET_TIMEOUT          = 12.5;                //  seconds
 const double NET_UPDATE_RATE      = 5.0;                 //  seconds
 const double NET_THRESHOLD_MTR    = 3.0;                 //  meters
 const double NET_THRESHOLD_RAD    = (3.0 * PI/180.0);    //  radians
+const double NET_THRESHOLD_VEL    = 0.25;                // meters/second
 
 //------------------------------------------------------------------------------
 // Slot table
@@ -73,6 +74,7 @@ BEGIN_SLOTTABLE(NetIO)
    "maxOrientationError",  // 12: Max DR angular error
    "maxAge",               // 13: Max age (without update) of networked players
    "maxEntityRange",       // 14: Max entity range of networked players
+   "maxVelocityError",     // 15: Max DR velocity error
 END_SLOTTABLE(NetIO)
 
 // Map slot table to handles
@@ -94,6 +96,7 @@ BEGIN_SLOT_MAP(NetIO)
    ON_SLOT(12, setSlotMaxOrientationErr,  Basic::Angle)
    ON_SLOT(13, setSlotMaxAge,             Basic::Time)
    ON_SLOT(14, setSlotMaxEntityRange,     Basic::Distance)
+   ON_SLOT(15, setSlotMaxVelocityErr,     Basic::Number)    // meters/second
 END_SLOT_MAP()
 
 //------------------------------------------------------------------------------
@@ -121,6 +124,7 @@ NetIO::NetIO()
    setMaxTimeDR(NET_UPDATE_RATE);              //  (seconds)
    setMaxPositionErr(NET_THRESHOLD_MTR);       //  (meters)
    setMaxOrientationErr(NET_THRESHOLD_RAD);    //  (radians)
+   setMaxVelocityErr(NET_THRESHOLD_VEL);       //  (meters/second)
    setMaxAge(NET_TIMEOUT);                     //  (seconds)
 
    nInNibs = 0;
@@ -190,6 +194,7 @@ void NetIO::copyData(const NetIO& org, const bool cc)
    setMaxTimeDR(org.maxTimeDR);
    setMaxPositionErr(org.maxPositionErr);
    setMaxOrientationErr(org.maxOrientationErr);
+   setMaxVelocityErr(org.maxVelocityErr);
    setMaxAge(org.maxAge);
 
    nInNibs = 0;
@@ -310,6 +315,12 @@ LCreal NetIO::getMaxOrientationErr(const Nib* const) const
    return maxOrientationErr;
 }
 
+// Dead-Reckoning: Returns max DR velocity error (meters/second)
+LCreal NetIO::getMaxVelocityErr(const Nib* const) const
+{
+   return maxVelocityErr;
+}
+
 // Dead-Reckoning: Returns max age before a networked player is removed (seconds)
 LCreal NetIO::getMaxAge(const Nib* const) const
 {
@@ -368,6 +379,13 @@ bool NetIO::setMaxPositionErr(const LCreal v)
 bool NetIO::setMaxOrientationErr(const LCreal v)
 {
    maxOrientationErr = v;
+   return true;
+}
+
+// Sets the max velocity error (meters/second)
+bool NetIO::setMaxVelocityErr(const LCreal v)
+{
+   maxVelocityErr = v;
    return true;
 }
 
@@ -1331,6 +1349,16 @@ bool NetIO::setSlotMaxEntityRange(const Basic::Distance* const msg)
    return ok;
 }
 
+bool NetIO::setSlotMaxVelocityErr(const Basic::Number* const msg)
+{
+   bool ok = false;
+   if (msg != 0) {
+      ok = setMaxVelocityErr(msg->getDouble());
+   }
+   return ok;
+}
+
+
 //------------------------------------------------------------------------------
 // getSlotByIndex()
 //------------------------------------------------------------------------------
@@ -1427,8 +1455,11 @@ std::ostream& NetIO::serialize(std::ostream& sout, const int i, const bool slots
    indent(sout,i+j);
    sout << "maxPositionError: ( Meters " << maxPositionErr << " )" << std::endl;
 
-   indent(sout,i+j);
+   indent(sout, i + j);
    sout << "maxOrientationError: ( Degrees " << (maxOrientationErr*Basic::Angle::R2DCC) << " )" << std::endl;
+
+   indent(sout, i + j);
+   sout << "maxVelocityError: " << maxVelocityErr << std::endl;
 
    indent(sout,i+j);
    sout << "maxAge: ( Seconds " << maxAge << " )" << std::endl;

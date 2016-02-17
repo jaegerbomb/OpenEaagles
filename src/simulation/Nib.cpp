@@ -88,6 +88,7 @@ void Nib::initData()
       apartMslAttached[i] = false;
    }
    apartNumMissiles = 0;
+   lastVel = 0;
 }
 
 
@@ -441,20 +442,20 @@ bool Nib::isPlayerStateUpdateRequired(const LCreal curExecTime)
    // ---
    // 3) When we're a local player, check for one of the following ...
    // ---
-   if ( (result == UNSURE) && player->isLocalPlayer()) {
+   if ((result == UNSURE) && player->isLocalPlayer()) {
 
       //LCreal drTime = curExecTime - getTimeExec();
       SynchronizedState playerState = player->getSynchronizedState();
       LCreal drTime = static_cast<LCreal>(playerState.getTimeExec()) - getTimeExec();
 
       // 3-a) Freeze flag has changed
-      if ( (player->isFrozen() && isNotFrozen()) || (!player->isFrozen() && isFrozen()) ) {
+      if ((player->isFrozen() && isNotFrozen()) || (!player->isFrozen() && isFrozen())) {
          result = YES;
       }
 
       // 3-b) Max DR timeout
       if (result == UNSURE) {
-         if ( drTime >= getNetIO()->getMaxTimeDR(this) ) {
+         if (drTime >= getNetIO()->getMaxTimeDR(this)) {
             result = YES;
          }
       }
@@ -462,25 +463,15 @@ bool Nib::isPlayerStateUpdateRequired(const LCreal curExecTime)
       // 3-c) Appearance has changed
       if (result == UNSURE &&
          (player->getDamage() != getDamage() ||
-         player->getSmoke()  != getSmoke()   ||
+         player->getSmoke() != getSmoke() ||
          player->getFlames() != getFlames() ||
-         player->getCamouflageType() != getCamouflageType() )
+         player->getCamouflageType() != getCamouflageType())
          ) {
-            result = YES;
-      }
-
-      // Lee - Life Form action state has changed!
-      const LifeForm* lf = dynamic_cast<const LifeForm*>(player);
-      if (lf != 0) {
-         if (result == UNSURE &&
-            lf->getActionState() != getActionState()) {
-            result = YES;
-         }
+         result = YES;
       }
 
       // 3-d) Check dead reckoning errors
       if (result == UNSURE && isNotFrozen()) {
-
          // Compute our dead reckoned position and angles, which are
          // based on our last packet sent.
          osg::Vec3d drPos;
@@ -516,16 +507,34 @@ bool Nib::isPlayerStateUpdateRequired(const LCreal curExecTime)
 
 
             // Check if any angle error is greater than the max error
-            errAngles[0] = lcAbs( lcAepcDeg(errAngles[0]) );
+            errAngles[0] = lcAbs(lcAepcDeg(errAngles[0]));
             if (errAngles[0] >= maxAngleErr) result = YES;
 
-            errAngles[1] = lcAbs( lcAepcDeg(errAngles[1]) );
+            errAngles[1] = lcAbs(lcAepcDeg(errAngles[1]));
             if (errAngles[1] >= maxAngleErr) result = YES;
 
-            errAngles[2] = lcAbs( lcAepcDeg(errAngles[2]) );
+            errAngles[2] = lcAbs(lcAepcDeg(errAngles[2]));
             if (errAngles[2] >= maxAngleErr) result = YES;
          }
       }
+
+      if (result == UNSURE && player->isMajorType(Player::LIFE_FORM)) {
+         const LifeForm* lf = dynamic_cast<const LifeForm*>(player);
+         if (lf != 0) {
+            LCreal maxVelErr = getNetIO()->getMaxVelocityErr(this);
+            Eaagles::osg::Vec3d vel = playerState.getGeocVelocity();
+            LCreal currVel = vel.length();
+            if (fabs(currVel - lastVel) > maxVelErr) {
+               result = YES;
+               lastVel = currVel;
+            }
+            if (result == UNSURE &&
+               lf->getActionState() != getActionState()) {
+               result = YES;
+            }
+         }
+      }
+
    }
 
    // ---

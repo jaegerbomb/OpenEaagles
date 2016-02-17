@@ -210,6 +210,9 @@ public:
    // Dead-Reckoning: Returns max DR orientation error (radians)
    virtual LCreal getMaxOrientationErr(const Nib* const nib = 0) const;
 
+   // Dead-Reckoning: Returns max DR velocity error (meters/second)
+   virtual LCreal getMaxVelocityErr(const Nib* const nib = 0) const;
+
    // Dead-Reckoning: Returns max age before a networked player is removed (seconds)
    virtual LCreal getMaxAge(const Nib* const nib = 0) const;
 
@@ -250,6 +253,7 @@ protected:
    virtual bool setMaxTimeDR(const LCreal v);               // Sets the max dead-rec time; forces next update (sec)
    virtual bool setMaxPositionErr(const LCreal v);          // Sets the max positional error (meters)
    virtual bool setMaxOrientationErr(const LCreal v);       // Sets the max orientation error (rad)
+   virtual bool setMaxVelocityErr(const LCreal v);          // Sets the max velocity error (meters/sec)
    virtual bool setMaxAge(const LCreal v);                  // Sets the max age; for removal (sec)
    virtual bool setMaxEntityRange(const LCreal v);          // Sets the max entity range (meters)
    virtual bool setFederateName(const Basic::String* const msg);   // Sets our federate name
@@ -270,6 +274,7 @@ protected:
    virtual bool setSlotMaxOrientationErr(const Basic::Angle* const msg);       // Sets the max orientation error(s)
    virtual bool setSlotMaxAge(const Basic::Time* const msg);                   // Sets the max age(s)
    virtual bool setSlotMaxEntityRange(const Basic::Distance* const msg);       // Sets the max entity range(s)
+   virtual bool setSlotMaxVelocityErr(const Basic::Number* const msg);         // Sets the max velocity error(s)
 
    // Basic::Component protected interface
    virtual bool shutdownNotification();
@@ -446,6 +451,7 @@ private:
    LCreal            maxTimeDR;        // Maximum DR time                  (seconds)
    LCreal            maxPositionErr;   // Maximum position error           (meters)
    LCreal            maxOrientationErr;  // Maximum orientation error      (radians)
+   LCreal            maxVelocityErr;   // Maximum velocity error           (meters/second)
    LCreal            maxAge;           // Maximum age of networked players (seconds)
 
 private: // Nib related private

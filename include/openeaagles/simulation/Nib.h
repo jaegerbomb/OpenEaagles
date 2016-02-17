@@ -297,6 +297,7 @@ private:
    LCreal      damage;                 // Damage state from no damage(0.0) to destroyed (1.0)
    LCreal      smoking;                // Smoke state from no smoke (0.0) to maximum (1.0)
    LCreal      flames;                 // Flames state from no flames (0.0) to maximum (1.0)
+   LCreal      lastVel;                // last velocity from packet
    unsigned int camouflage;            // Camouflage type (0 is none)
    unsigned int actionState;           // For LifeForms (walking/running/etc...)
    bool        detMsgSent;             // True if detonation message was sent
