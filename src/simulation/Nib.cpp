@@ -1,5 +1,6 @@
 #include "openeaagles/simulation/Nib.h"
 #include "openeaagles/simulation/Ntm.h"
+#include "openeaagles/simulation/LifeForms.h"
 
 #include "openeaagles/simulation/AirVehicle.h"
 #include "openeaagles/simulation/GroundVehicle.h"
@@ -50,6 +51,7 @@ void Nib::initData()
    smoking = 0.0;
    flames = 0.0;
    camouflage = 0;
+   actionState = 0;
    detMsgSent = false;
 
    execTime = 0;
@@ -118,6 +120,7 @@ void Nib::copyData(const Nib& org, const bool cc)
    smoking = org.smoking;
    flames = org.flames;
    camouflage = org.camouflage;
+   actionState = org.actionState;
    detMsgSent = org.detMsgSent;
 
    execTime = org.execTime;
@@ -400,6 +403,12 @@ bool Nib::setCamouflageType(const unsigned int v)
    return true;
 }
 
+bool Nib::setActionState(const unsigned int x)
+{
+   actionState = x;
+   return true;
+}
+
 // Sets the detonation message sent flag
 bool Nib::setDetonationMessageSent(const bool flg)
 {
@@ -458,6 +467,15 @@ bool Nib::isPlayerStateUpdateRequired(const LCreal curExecTime)
          player->getCamouflageType() != getCamouflageType() )
          ) {
             result = YES;
+      }
+
+      // Lee - Life Form action state has changed!
+      const LifeForm* lf = dynamic_cast<const LifeForm*>(player);
+      if (lf != 0) {
+         if (result == UNSURE &&
+            lf->getActionState() != getActionState()) {
+            result = YES;
+         }
       }
 
       // 3-d) Check dead reckoning errors
@@ -676,6 +694,8 @@ void Nib::playerState2Nib()
       setSmoke( player->getSmoke() );
       setFlames( player->getFlames() );
       setCamouflageType( player->getCamouflageType() );
+      const LifeForm* lf = dynamic_cast<const LifeForm*>(player);
+      if (lf != 0) setActionState(lf->getActionState());
       setSide( player->getSide() );
 
       // Reset our dead reckoning with the current state data from the player

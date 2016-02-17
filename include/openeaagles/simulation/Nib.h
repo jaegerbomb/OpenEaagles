@@ -144,10 +144,12 @@ public:
    LCreal getSmoke() const                        { return smoking; }
    LCreal getFlames() const                       { return flames; }
    unsigned int getCamouflageType() const         { return camouflage; }
+   unsigned int getActionState() const            { return actionState;  }
    virtual bool setDamage(const LCreal v); 
    virtual bool setSmoke(const LCreal v); 
    virtual bool setFlames(const LCreal v); 
    virtual bool setCamouflageType(const unsigned int v);
+   virtual bool setActionState(const unsigned int x);
 
    // Articulated Part: wing sweep angle change count
    unsigned int getAPartWingSweepCnt() const { return apartWingSweepCnt; } 
@@ -296,6 +298,7 @@ private:
    LCreal      smoking;                // Smoke state from no smoke (0.0) to maximum (1.0)
    LCreal      flames;                 // Flames state from no flames (0.0) to maximum (1.0)
    unsigned int camouflage;            // Camouflage type (0 is none)
+   unsigned int actionState;           // For LifeForms (walking/running/etc...)
    bool        detMsgSent;             // True if detonation message was sent
 
    // Times

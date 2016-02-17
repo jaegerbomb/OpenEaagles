@@ -147,7 +147,7 @@ bool LifeForm::setVelocity(const LCreal ue, const LCreal ve, const LCreal we)
     // we only change our appearance bit if we are parachuting
     if (actionState != PARACHUTING) {    
         // test for running and walking
-        if (vel <= 0)  actionState = UPRIGHT_STANDING;
+        if (vel <= 0.0001)  actionState = UPRIGHT_STANDING;
         else if (vel <= 2.6) actionState = UPRIGHT_WALKING;
         else actionState = UPRIGHT_RUNNING; 
     }
