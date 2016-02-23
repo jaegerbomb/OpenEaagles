@@ -58,8 +58,8 @@ public:
    Route();
 
    // Get the current 'to' steerpoint
-   virtual Steerpoint* getSteerpoint();               // The 'to' steerpoint
-   virtual const Steerpoint* getSteerpoint() const;   // The 'to' steerpoint (const version)
+   virtual Steerpoint* getSteerpointPreRef();               // The 'to' steerpoint
+   virtual const Steerpoint* getSteerpointPreRef() const;   // The 'to' steerpoint (const version)
    virtual const char* getSteerpointName() const;     // Name of the 'to' steerpoint
    virtual unsigned int getStptIndex() const;         // Index of the 'to' steerpoint
 
@@ -163,12 +163,12 @@ private:
 // Inline functions
 //------------------------------------------------------------------------------
 
-inline Steerpoint* Route::getSteerpoint()
+inline Steerpoint* Route::getSteerpointPreRef()
 {
    return const_cast<Steerpoint*>(static_cast<const Steerpoint*>(getSteerpointImp()));
 }
 
-inline const Steerpoint* Route::getSteerpoint() const
+inline const Steerpoint* Route::getSteerpointPreRef() const
 {
    return getSteerpointImp();
 }

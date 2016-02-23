@@ -323,7 +323,7 @@ bool Autopilot::processModeNavigation()
       // Do we have NAV commanded altitude?
       const Route* route = nav->getPriRoute();
       if (route != 0) {
-         const Steerpoint* sp = route->getSteerpoint();
+         const Steerpoint* sp = route->getSteerpointPreRef();
          if (sp != 0) {
             if (sp->isCmdAltValid()) {
                setCommandedAltitudeFt( sp->getCmdAltitudeFt() );
@@ -334,6 +334,7 @@ bool Autopilot::processModeNavigation()
                   setCommandedVelocityKts( spd );
                }
             }
+            sp->unref();
          }
       }
       ok = true;

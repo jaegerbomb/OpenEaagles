@@ -772,7 +772,7 @@ bool Navigation::updateNavSteering()
    // primary route for this iteration
    Route* rte = getPriRoutePreRef();
    if (rte != 0) {
-      const Steerpoint* to = rte->getSteerpoint();
+      const Steerpoint* to = rte->getSteerpointPreRef();
       if (to != 0) {
          if (to->isNavDataValid()) {
             setTrueBrgDeg( to->getTrueBrgDeg() );
@@ -788,6 +788,7 @@ bool Navigation::updateNavSteering()
          else {
             setNavSteeringValid( false );
          }
+         to->unref();
       }
       rte->unref();
    }

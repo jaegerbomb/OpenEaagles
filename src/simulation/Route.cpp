@@ -307,6 +307,7 @@ const Steerpoint* Route::getSteerpointImp() const
     const Steerpoint* p = 0;
     if (to != 0) {
         p = static_cast<const Steerpoint*>(to->object());
+        if (p != 0) p->ref();
     }
     return p;
 }
@@ -662,7 +663,7 @@ bool Route::replaceAllSteerpoints(Basic::PairStream* const newSteerpointList, un
 bool Route::deleteSteerpoint(Steerpoint* const sp) 
 {
    // get a pointer to our current 'to' steerpoint
-   const Steerpoint* p = getSteerpoint();
+   const Steerpoint* p = getSteerpointPreRef();
 
    // remove the steerpoint
    Basic::PairStream* steerpoints = getComponents();
@@ -685,6 +686,8 @@ bool Route::deleteSteerpoint(Steerpoint* const sp)
    else {
       directTo(p);
    }
+
+   if (p != 0) p->unref();
 
    return true;
 }
