@@ -62,6 +62,7 @@ public:
     virtual void reset();
 
 protected:
+   virtual bool computeActionState();
    // Basic::Component protected interface
    virtual bool shutdownNotification();
     

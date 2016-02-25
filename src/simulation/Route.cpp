@@ -304,12 +304,15 @@ bool Route::decStpt()
 
 const Steerpoint* Route::getSteerpointImp() const
 {
-    const Steerpoint* p = 0;
-    if (to != 0) {
-        p = static_cast<const Steerpoint*>(to->object());
-        if (p != 0) p->ref();
-    }
-    return p;
+   const Basic::Pair* pair = to.getRefPtr();
+   const Steerpoint* p = 0;
+   if (pair != 0) {
+      if (to != 0) {
+         p = static_cast<const Steerpoint*>(pair->object());
+         if (p != 0) p->ref();
+      }
+   }
+   return p;
 }
 
 const char* Route::getSteerpointName() const

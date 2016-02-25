@@ -136,20 +136,26 @@ void LifeForm::fire()
     pitchObj->unref();
 }
 
+bool LifeForm::computeActionState()
+{
+   double vel = getTotalVelocity();
+   // we only change our appearance bit if we are parachuting
+   if (actionState != PARACHUTING) {
+      // test for running and walking
+      if (vel <= 0.001)  actionState = UPRIGHT_STANDING;
+      else if (vel <= 2.6) actionState = UPRIGHT_WALKING;
+      else actionState = UPRIGHT_RUNNING;
+   }
+   return true;
+}
 
 // override our set velocity, so we can determine if we are walking, running, or standing
 bool LifeForm::setVelocity(const LCreal ue, const LCreal ve, const LCreal we)
 {
     bool ok = BaseClass::setVelocity(ue, ve, we);
 
-    double vel = getTotalVelocity();
-    
-    // we only change our appearance bit if we are parachuting
-    if (actionState != PARACHUTING) {    
-        // test for running and walking
-        if (vel <= 0.001)  actionState = UPRIGHT_STANDING;
-        else if (vel <= 2.6) actionState = UPRIGHT_WALKING;
-        else actionState = UPRIGHT_RUNNING; 
+    if (ok) {
+       ok = computeActionState();
     }
 
     return ok;

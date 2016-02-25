@@ -921,7 +921,7 @@ double Player::getCommandedAltitudeFt() const
 // True if player is destroyed
 bool Player::isDestroyed() const
 {
-   return (damage > 0.999f);
+   return (damage > 0.9f);
 }
 
 // Player's outgoing NIB(s)
