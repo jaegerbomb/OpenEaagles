@@ -38,7 +38,7 @@ void NetIO::processDetonationPDU(const DetonationPDU* const pdu)
 }
 
 void NetIO::checkDetonationManually(const DetonationPDU* const pdu) const
-{
+{  
    if (pdu == 0) return;
    osg::Vec3d worldPos(pdu->location.X_coord, pdu->location.Y_coord, pdu->location.Z_coord);
    const Simulation::Station* stn = getStation();

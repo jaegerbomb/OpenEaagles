@@ -707,6 +707,10 @@ void Nib::playerState2Nib()
       if (lf != 0) setActionState(lf->getActionState());
       setSide( player->getSide() );
 
+      // Dead reckoning has to be static if the player is frozen
+      int drAlg = RVW_DRM;
+      if (player->isFrozen()) drAlg = STATIC_DRM;
+
       // Reset our dead reckoning with the current state data from the player
       //resetDeadReckoning(
       //   RVW_DRM,
@@ -718,7 +722,7 @@ void Nib::playerState2Nib()
       //);
 
       resetDeadReckoning(
-         RVW_DRM,
+         drAlg,
          player->getSynchronizedState().getGeocPosition(),
          player->getSynchronizedState().getGeocVelocity(),
          player->getSynchronizedState().getGeocAcceleration(),
