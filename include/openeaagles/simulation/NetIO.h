@@ -366,6 +366,9 @@ public:
    // Finds the network type mapper by Player
    virtual const Ntm* findNetworkTypeMapper(const Player* const p) const;
 
+   // Finds network type mapper by string
+   virtual const Ntm* findNetworkTypeMapper(const Basic::String* const factoryName, const Basic::String* const p) const;
+
    // NTM input node
    class NtmInputNode : public Basic::Object {
       DECLARE_SUBCLASS(NtmInputNode,Basic::Object)
@@ -381,8 +384,9 @@ public:
       DECLARE_SUBCLASS(NtmOutputNode,Basic::Object)
    public:
       NtmOutputNode();
-      virtual const Ntm* findNetworkTypeMapper(const Player* const p) const =0;
-      virtual bool add2OurLists(Ntm* const ntm) =0;
+      virtual const Ntm* findNetworkTypeMapper(const Player* const p) const = 0;
+      virtual const Ntm* findNetworkTypeMapper(const Basic::String* const factoryName, const Basic::String* const p) const = 0;
+      virtual bool add2OurLists(Ntm* const ntm) = 0;
       virtual void print(std::ostream& sout, const int icnt=0) const =0;
    };
 

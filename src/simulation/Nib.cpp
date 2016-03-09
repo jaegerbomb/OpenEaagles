@@ -669,7 +669,7 @@ bool Nib::isPlayerStateUpdateRequired(const LCreal curExecTime)
    }
 
    // ---
-   // 6) When we're a network player -- Update when the exec time of the
+   // 6) When we're a network player -- Update when the exec ztime of the
    //    last input (player's NIB) is different that our exec time.
    // ---
    if ( (result == UNSURE) && player->isNetworkedPlayer() ) {
@@ -711,16 +711,6 @@ void Nib::playerState2Nib()
       int drAlg = RVW_DRM;
       if (player->isFrozen()) drAlg = STATIC_DRM;
 
-      // Reset our dead reckoning with the current state data from the player
-      //resetDeadReckoning(
-      //   RVW_DRM,
-      //   player->getGeocPosition(),
-      //   player->getGeocVelocity(),
-      //   player->getGeocAcceleration(),
-      //   player->getGeocEulerAngles(),
-      //   player->getGeocAngularVelocities()
-      //);
-
       resetDeadReckoning(
          drAlg,
          player->getSynchronizedState().getGeocPosition(),
@@ -731,10 +721,7 @@ void Nib::playerState2Nib()
       );
 
       // mark the current times
-      //Simulation* sim = getNetIO()->getSimulation();
-      //setTimeExec( (LCreal) sim->getExecTimeSec() );
       setTimeExec( static_cast<LCreal>(player->getSynchronizedState().getTimeExec()) );
-      //setTimeUtc( static_cast<LCreal>(sim->getSysTimeOfDay()) );
       setTimeUtc( static_cast<LCreal>(player->getSynchronizedState().getTimeUtc()) );
 
       {

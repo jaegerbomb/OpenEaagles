@@ -35,6 +35,9 @@
 #endif
 
 namespace Eaagles {
+   namespace Basic {
+      class String;
+   }
 namespace Simulation {
 
 //==============================================================================
@@ -1016,6 +1019,17 @@ const Ntm* NetIO::findNetworkTypeMapper(const Player* const p) const
    return result;
 }
 
+// Finds the network type mapper by Name
+const Ntm* NetIO::findNetworkTypeMapper(const Basic::String* const factoryName, const Basic::String* const p) const
+{
+   const Ntm* result = 0;
+   if (outputNtmTree != 0 && p != 0) {
+      result = outputNtmTree->findNetworkTypeMapper(factoryName, p);
+   }
+   return result;
+}
+
+
 // Adds an item to the input entity type table
 bool NetIO::addInputEntityType(Ntm* const ntm)
 {
@@ -1565,6 +1579,7 @@ public:
 
    // NetIO::NtmOutputNode class functions
    virtual const Ntm* findNetworkTypeMapper(const Player* const p) const;
+   virtual const Ntm* findNetworkTypeMapper(const Basic::String* const factoryName, const Basic::String* const p) const;
    virtual bool add2OurLists(Ntm* const ntm);
    virtual void print(std::ostream& sout, const int icnt) const;
 
@@ -1740,6 +1755,61 @@ const Ntm* NtmOutputNodeStd::findNetworkTypeMapper(const Player* const p) const
 
    return result;
 }
+
+//------------------------------------------------------------------------------
+// Find the NTM node for the name of a target player, p
+//------------------------------------------------------------------------------
+const Ntm* NtmOutputNodeStd::findNetworkTypeMapper(const Basic::String* const factoryName, const Basic::String* const p) const
+{
+   if (p == 0 || factoryName == 0) return 0;
+   const Ntm* result = 0;
+
+   // Using factory names, is the target player either the same or derived from
+   // our node?  (the root node, which has no factory name, will always match)
+   if (nodeFactoryName == 0 || (strcmp(factoryName->getString(), nodeFactoryName) == 0)) {
+
+      // First, we'll search our subnodes to see if they'll find a match
+      // (i.e., if it's derived from our node then there may be a better match)
+      const Basic::List::Item* item = subnodeList->getFirstItem();
+      while (item != 0 && result == 0) {
+         const NtmOutputNodeStd* subnode = static_cast<const NtmOutputNodeStd*>(item->getValue());
+         result = subnode->findNetworkTypeMapper(factoryName, p);
+         item = item->getNext();
+      }
+
+      // Second, we'll search our NTM list for a template player with a
+      // type string matching the target player.
+      if (result == 0 && nodeFactoryName != 0) {
+
+         // Target player's type string and length
+         const size_t pTypeLen = p->len();
+
+         // Search the NTM for a match with the most matching type string characters,
+         // but not more than the target player's type string.
+         const Basic::List::Item* item = ntmList->getFirstItem();
+         while (item != 0 && result == 0) {
+
+            // Get the template player and its type string with length
+            const Ntm* tstNtm = static_cast<const Ntm*>(item->getValue());
+            const Player* const tp = tstNtm->getTemplatePlayer();
+            const Basic::String* const tpType = tp->getType();
+            const size_t tpTypeLen = tpType->len();
+
+            if (tpTypeLen <= pTypeLen) {
+               bool match = (strncmp(p->getString(), tpType->getString(), tpTypeLen) == 0);
+               if (match) {
+                  result = tstNtm;
+               }
+            }
+
+            item = item->getNext();
+         }
+
+      }
+   }
+   return result;
+}
+
 
 //------------------------------------------------------------------------------
 // Check if the target NTM's template player is the same or derived from
