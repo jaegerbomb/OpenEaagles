@@ -60,4 +60,9 @@
 #define EAAGLES_CONFIG_MAX_NETIO_NEW_OUTGOING   150
 #endif
 
+//  Max chunk size of players than can send out data
+#ifndef EAAGLES_CONFIG_MAX_NETIO_OUTPUT_CHUNK
+#define EAAGLES_CONFIG_MAX_NETIO_OUTPUT_CHUNK   50
 #endif
+#endif
+

@@ -794,6 +794,9 @@ public:
    // Geocentric (ECEF) position vector (meters)
    virtual bool setGeocPosition(const osg::Vec3d& gcPos, const bool slaved = false);
 
+   // Lee - function to allow altitude lookup prior to detonation check
+   virtual void preProcessDetonation(osg::Vec3d& weaponWorldPOs); 
+
    // ---
    // Set the player's orientation angles (roll, pitch and yaw)
    //

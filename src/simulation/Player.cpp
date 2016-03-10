@@ -2173,6 +2173,10 @@ bool Player::setPositionLLA(const double lat, const double lon, const double alt
    return true;
 }
 
+void Player::preProcessDetonation(osg::Vec3d&)
+{
+   // this is default
+}
 
 // Geocentric position vector (meters)
 bool Player::setGeocPosition(const osg::Vec3d& pos, const bool slaved)

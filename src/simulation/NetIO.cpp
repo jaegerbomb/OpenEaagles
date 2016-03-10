@@ -40,6 +40,8 @@ namespace Eaagles {
    }
 namespace Simulation {
 
+   unsigned int NetIO::currentOutputIdx = 0;
+
 //==============================================================================
 // Class: NetIO
 //==============================================================================
@@ -634,9 +636,12 @@ void NetIO::updateOutputList()
 void NetIO::processOutputList()
 {
    // ---
-   // Send player states
+   // Send player states, but only in chunks
    // ---
-   for (unsigned int idx = 0; idx < getOutputListSize(); idx++) {
+   unsigned int maxOutput = ((currentOutputIdx + EAAGLES_CONFIG_MAX_NETIO_OUTPUT_CHUNK) > getOutputListSize()) ?
+      getOutputListSize() : (currentOutputIdx + EAAGLES_CONFIG_MAX_NETIO_OUTPUT_CHUNK);
+
+   for (unsigned int idx = currentOutputIdx; idx < maxOutput; idx++, currentOutputIdx++) {
 
       Nib* nib = getOutputNib(idx);
       if (getSimulation() == 0) return;
@@ -673,6 +678,9 @@ void NetIO::processOutputList()
          nib->networkOutputManagers(static_cast<LCreal>(curExecTime));
 
       }
+   }
+   if (currentOutputIdx == getOutputListSize()) {
+      currentOutputIdx = 0;
    }
 }
 

@@ -495,6 +495,7 @@ private:  // Ntm related private
    // Output entity type table
    const Ntm*     outputEntityTypes[MAX_ENTITY_TYPES]; // Table of pointers to output entity type mappers; Ntm objects
    unsigned int   nOutputEntityTypes;                  // Number of output entity mappers (Ntm objects) in the table, 'outputEntityTypes'
+   static unsigned int currentOutputIdx;
 };
 
 
