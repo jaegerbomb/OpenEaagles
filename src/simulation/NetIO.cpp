@@ -641,6 +641,7 @@ void NetIO::processOutputList()
    unsigned int maxOutput = ((currentOutputIdx + EAAGLES_CONFIG_MAX_NETIO_OUTPUT_CHUNK) > getOutputListSize()) ?
       getOutputListSize() : (currentOutputIdx + EAAGLES_CONFIG_MAX_NETIO_OUTPUT_CHUNK);
 
+   //std::cout << "CURRENT IDX = " << currentOutputIdx << std::endl;
    for (unsigned int idx = currentOutputIdx; idx < maxOutput; idx++, currentOutputIdx++) {
 
       Nib* nib = getOutputNib(idx);
@@ -679,7 +680,7 @@ void NetIO::processOutputList()
 
       }
    }
-   if (currentOutputIdx == getOutputListSize()) {
+   if (currentOutputIdx >= getOutputListSize()) {
       currentOutputIdx = 0;
    }
 }
