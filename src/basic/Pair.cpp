@@ -92,7 +92,7 @@ std::ostream& Pair::serialize(std::ostream& sout, const int indent, const bool) 
    }
 
    const Simulation::Player* ply = dynamic_cast<const Simulation::Player*>(obj);
-   if (ply != 0 && ply->isNetworkedPlayer()) return sout;
+   if (ply != 0 && (ply->isNetworkedPlayer() || !ply->isOkToSerialize())) return sout;
    
    if (slot() != 0 && !slot()->isEmpty()) {
       sout << slot()->getString();

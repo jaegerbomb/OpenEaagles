@@ -363,7 +363,7 @@ void Player::initData()
    syncState2Ready = false;
    syncState1.clear();
    syncState2.clear();
-
+   okToSerialize = true;
 }
 
 //------------------------------------------------------------------------------

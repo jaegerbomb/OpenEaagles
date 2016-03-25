@@ -758,6 +758,9 @@ public:
    virtual bool setInterpolateTerrain(const bool f);           // sets the DTED terrain interpolation flag
    virtual bool setTerrainElevationRequired(const bool b);     // Sets OTW terrain elevation request flag
 
+   virtual void setOkToSerialize(const bool x)  { okToSerialize = x; }
+   bool isOkToSerialize() const                 { return okToSerialize;  }
+
    // ---
    // Set the player's position
    //
@@ -1220,6 +1223,9 @@ private:
    bool                 syncState2Ready;
    SynchronizedState    syncState1;
    SynchronizedState    syncState2;
+
+   // Serialize flag - use this when we don't want to save a player
+   bool okToSerialize;
 };
 
 // -----------------------------------------------------------------------------
