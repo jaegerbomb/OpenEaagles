@@ -44,7 +44,10 @@ bool Nib::munitionDetonationMsgFactory(const LCreal)
     // Ok, we have the weapon, now get the firing and target players
     Simulation::Player* tPlayer = mPlayer->getTargetPlayer();
     Simulation::Player* fPlayer = mPlayer->getLaunchVehicle();
-    if (fPlayer == 0) return false;
+    int launcherId = 0;
+    if (fPlayer != nullptr) {
+       launcherId = fPlayer->getID();
+    }
 
     // ---
     // PDU header
@@ -62,7 +65,7 @@ bool Nib::munitionDetonationMsgFactory(const LCreal)
     // ---
     // Set the PDU data with the firing (launcher) player's id
     // ---
-    pdu.firingEntityID.ID = fPlayer->getID();
+    pdu.firingEntityID.ID = launcherId;
     pdu.firingEntityID.simulationID.siteIdentification = getSiteID();
     pdu.firingEntityID.simulationID.applicationIdentification = getApplicationID();
 
