@@ -392,6 +392,9 @@ public:
 
    // Lee - quick fixes
    virtual void enableInput()    { inputFlg = true; }
+   virtual void disableInput()   { inputFlg = false;  }
+   virtual void enableOutput()   { outputFlg = true;  }
+   virtual void disableOutput()  { outputFlg = false; }
    virtual void setSimulation(Simulation* sim);
 
 protected:
