@@ -518,16 +518,16 @@ bool Nib::isPlayerStateUpdateRequired(const LCreal curExecTime)
          }
       }
 
-      if (result == UNSURE && player->isMajorType(Player::LIFE_FORM)) {
+      if (result == UNSURE && (player->isMajorType(Player::LIFE_FORM) || player->isMajorType(Player::GROUND_VEHICLE))) {
+         LCreal maxVelErr = getNetIO()->getMaxVelocityErr(this);
+         Eaagles::osg::Vec3d vel = playerState.getGeocVelocity();
+         LCreal currVel = vel.length();
+         if (fabs(currVel - lastVel) > maxVelErr) {
+            result = YES;
+            lastVel = currVel;
+         }
          const LifeForm* lf = dynamic_cast<const LifeForm*>(player);
          if (lf != 0) {
-            LCreal maxVelErr = getNetIO()->getMaxVelocityErr(this);
-            Eaagles::osg::Vec3d vel = playerState.getGeocVelocity();
-            LCreal currVel = vel.length();
-            if (fabs(currVel - lastVel) > maxVelErr) {
-               result = YES;
-               lastVel = currVel;
-            }
             if (result == UNSURE &&
                lf->getActionState() != getActionState()) {
                result = YES;
