@@ -124,9 +124,9 @@ void NetIO::checkDetonationManually(const DetonationPDU* const pdu) const
                }
                item = item->getNext();
             }
+            plist->unref();
+            plist = 0;
          }
-         plist->unref();
-         plist = 0;
          if (cWpn != 0) {
             cWpn->container(0);
             cWpn->unref();
