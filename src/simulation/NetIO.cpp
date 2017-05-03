@@ -547,7 +547,7 @@ void NetIO::updateOutputList()
          while (i < nOutNibs) {
             if (outputList[i]->isMode(Player::DELETE_REQUEST)) {
                // Deleting this NIB
-               //std::cout << "NetIO::updateOutputList() cleanup: nib = " << outputList[i] << std::endl;
+               std::cout << "NetIO::updateOutputList() cleanup: nib = " << outputList[i] << std::endl;
                destroyOutputNib(outputList[i++]);
             }
             else {
@@ -582,7 +582,7 @@ void NetIO::updateOutputList()
                Player* player = static_cast<Player*>(playerPair->object());
 
                if (player->isLocalPlayer() || (isRelayEnabled() && player->getNetworkID() != getNetworkID()))  {
-                  if (player->isActive() && player->isNetOutputEnabled()) {
+                  if (player->isNetOutputEnabled()) {
 
                      // We have (1) an active local player to output or
                      //         (2) an active networked player to relay ...
@@ -642,12 +642,13 @@ void NetIO::processOutputList()
       getOutputListSize() : (currentOutputIdx + EAAGLES_CONFIG_MAX_NETIO_OUTPUT_CHUNK);
 
    //std::cout << "CURRENT IDX = " << currentOutputIdx << std::endl;
+   //std::cout << "OUTPUT LIST SIZE = " << getOutputListSize() << std::endl;
+   //int sendCount = 0;
    for (unsigned int idx = currentOutputIdx; idx < maxOutput; idx++, currentOutputIdx++) {
 
       Nib* nib = getOutputNib(idx);
       if (getSimulation() == 0) return;
       double curExecTime = getSimulation()->getExecTimeSec();
-
       if (nib->isEntityTypeValid()) {
 
          // While this NIB isn't being deleted ...
@@ -667,7 +668,6 @@ void NetIO::processOutputList()
 
          // Manager entity state updates (do this after detonation check because it updates the NIB's mode)
          nib->entityStateManager(static_cast<LCreal>(curExecTime));
-
          // Send a fire message; if a fire event was needed, we delayed sending
          // until after the weapon's entity state has been sent at least once.
          if (fired) {
@@ -676,10 +676,11 @@ void NetIO::processOutputList()
          }
 
          // Manage all systems that require network functionality (IFF, Radios, Emitters, etc)
-         nib->networkOutputManagers(static_cast<LCreal>(curExecTime));
+         //nib->networkOutputManagers(static_cast<LCreal>(curExecTime));
 
       }
    }
+   //std::cout << "SEND COUNT PER FRAME = " << sendCount << std::endl;
    if (currentOutputIdx >= getOutputListSize()) {
       currentOutputIdx = 0;
    }

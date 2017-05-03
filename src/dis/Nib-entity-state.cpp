@@ -554,8 +554,9 @@ bool Nib::entityStateManager(const LCreal curExecTime)
 
          // Deactive this entity?
          {
-            if (isMode(Simulation::Player::DELETE_REQUEST) || player->isDead() )
+            if (isMode(Simulation::Player::DELETE_REQUEST) || player->isDead() || player->isMode(Simulation::Player::INACTIVE))  {
                pdu->appearance |= DEACTIVATE_BIT;
+            }
          }
 
 
@@ -575,7 +576,6 @@ bool Nib::entityStateManager(const LCreal curExecTime)
          {
             unsigned int bits = getCamouflageType();
             if (bits > 0 && bits <= 4) {
-               std::cout << "CAMO" << std::endl;
                pdu->appearance |= CAMOUFLAGE_BIT;
                // Land based camouflage bits
                if (player->isMajorType(Simulation::Player::GROUND_VEHICLE)) {
