@@ -1615,7 +1615,11 @@ struct VariableDatum {
    };
 
    // Temp connection to data, better way...
-   uint8_t* getData(){ return reinterpret_cast<uint8_t*>(&variableDatumLength) + sizeof(long); };
+   uint8_t* getData(){
+      uint8_t *p = reinterpret_cast<uint8_t*>(this);
+      int pcount = 8;
+      return &p[pcount];
+   }
 
    friend std::ostream& operator << ( std::ostream& s, const VariableDatum&  v) {
       s  << "  variableDatumID:       " << static_cast<int>(v.variableDatumID) << std::endl

@@ -579,6 +579,117 @@ struct DataPDU{
    };
 };
 
+//-----------------------------------------------
+// SetData PDU
+//-----------------------------------------------
+struct SetDataPDU {
+
+   PDUHeader              header;
+   EntityIdentifierDIS    originatingID;
+   EntityIdentifierDIS    receivingID;
+   uint32_t               requestID;
+   uint32_t               padding;
+   uint32_t               numFixedRecords;
+   uint32_t               numVariableRecords;
+
+   uint8_t* getData() {
+      uint8_t *p = reinterpret_cast<uint8_t*>(this);
+      int pcount = sizeof(PDUHeader)
+         + sizeof(originatingID)
+         + sizeof(receivingID)
+         + 16; 
+      return &p[pcount];
+   };
+   const uint8_t* getData() const {
+      const uint8_t *p = reinterpret_cast<const uint8_t*>(this);
+      int pcount = sizeof(PDUHeader)
+         + sizeof(originatingID)
+         + sizeof(receivingID)
+         + 16;
+      return &p[pcount];
+   };
+
+
+   FixedDatum* getFixedDatum(const unsigned int index) {
+      if (index >= numFixedRecords) return 0;
+
+      uint8_t* ptr = getData();
+      FixedDatum* datum = reinterpret_cast<FixedDatum*>(ptr);
+      for (unsigned int i = 0; i < index; i++) {
+         datum++;
+      }
+
+      return datum;
+   };
+
+   void swapFixedDatum() {
+      FixedDatum *datum = 0;
+      for (unsigned int i = 0; i < numFixedRecords; i++) {
+         datum = getFixedDatum(i);
+         datum->swapBytes();
+      }
+   };
+
+   VariableDatum* getVariableDatum(const unsigned int index) {
+      if (index >= numVariableRecords) return 0;
+
+      uint8_t *ptr = getData();
+      if (numFixedRecords > 0) {
+         FixedDatum *datum = getFixedDatum(numFixedRecords - 1);
+         ptr = reinterpret_cast<uint8_t*>(datum);
+         ptr += sizeof(FixedDatum);
+      }
+
+      VariableDatum *vdatum = (VariableDatum *)ptr;
+      for (unsigned int i = 0; i < index; i++) {
+         ptr += vdatum->getSize();
+         vdatum = reinterpret_cast<VariableDatum*>(ptr);
+      }
+
+      return vdatum;
+   };
+
+   void swapVariableDatum() {
+      VariableDatum *datum = 0;
+      for (unsigned int i = 0; i < numVariableRecords; i++) {
+         datum = getVariableDatum(i);
+         datum->swapBytes();
+      }
+   };
+
+   void pack() {
+      swapVariableDatum();
+      swapFixedDatum();
+      header.swapBytes();
+      originatingID.swapBytes();
+      receivingID.swapBytes();
+      numFixedRecords = convertUInt32(numFixedRecords);
+      numVariableRecords = convertUInt32(numVariableRecords);
+      requestID = convertUInt32(requestID);
+   };
+
+   void unpack() {
+      header.swapBytes();
+      originatingID.swapBytes();
+      receivingID.swapBytes();
+      numFixedRecords = convertUInt32(numFixedRecords);
+      numVariableRecords = convertUInt32(numVariableRecords);
+      requestID = convertUInt32(requestID);
+      swapVariableDatum();
+      swapFixedDatum();
+   };
+
+   void dumpData() const {
+      std::cout << "------------------------------------------------" << std::endl;
+      std::cout << "SetDataPDU(" << static_cast<int>(header.PDUType) << ")" << std::endl;
+      std::cout << "Emitting Entity:" << std::endl << originatingID;
+      std::cout << "Destination Entity:" << std::endl << receivingID;
+      std::cout << "Number of fixed records: " << std::endl << numFixedRecords;
+      std::cout << "Number of variable records: " << std::endl << numVariableRecords;
+   };
+};
+
+
 
 //-----------------------------------------------
 // Comment PDU

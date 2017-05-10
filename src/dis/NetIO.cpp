@@ -367,6 +367,16 @@ void NetIO::netInputHander()
                   }
                   break;
 
+                  case PDU_SET_DATA: {
+                     SetDataPDU* pPdu = reinterpret_cast<SetDataPDU*>(header);
+                     if (Basic::NetHandler::isNotNetworkByteOrder()) pPdu->unpack();
+                     if (getSiteID() != pPdu->originatingID.simulationID.siteIdentification ||
+                        getApplicationID() != pPdu->originatingID.simulationID.applicationIdentification) {
+                        processSetDataPDU(pPdu);
+                     }
+                  }
+                  break;
+
                   case PDU_COMMENT: {
                      CommentPDU* pPdu = reinterpret_cast<CommentPDU*>(header);
                      if (Basic::NetHandler::isNotNetworkByteOrder()) pPdu->swapBytes();
@@ -508,6 +518,15 @@ bool NetIO::processDataPDU(const DataPDU* const)
 {
    return true;
 }
+
+//------------------------------------------------------------------------------
+// processSetDataPDU() callback --
+//------------------------------------------------------------------------------
+bool NetIO::processSetDataPDU(const SetDataPDU* const)
+{
+   return true;
+}
+
 
 //------------------------------------------------------------------------------
 // processCommentPDU() callback --

@@ -37,6 +37,7 @@ namespace Dis {
    struct TransmitterPDU;
    struct DataQueryPDU;
    struct DataPDU;
+   struct SetDataPDU;
    struct CommentPDU;
    struct StartPDU;
    struct StopPDU;
@@ -309,6 +310,7 @@ protected:
    virtual bool processTransmitterPDU(const TransmitterPDU* const pdu);
    virtual bool processDataQueryPDU(const DataQueryPDU* const pdu);
    virtual bool processDataPDU(const DataPDU* const pdu);
+   virtual bool processSetDataPDU(const SetDataPDU* const pdu);
    virtual bool processCommentPDU(const CommentPDU* const pdu);
    virtual bool processStartPDU(const StartPDU* const pdu);
    virtual bool processStopPDU(const StopPDU* const pdu);
