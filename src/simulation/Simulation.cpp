@@ -429,7 +429,14 @@ void Simulation::reset()
 
             // reinstated the container pointer and player name
             ip->container(this);
-            ip->setName(*pair->slot());
+            // set the name as the slot of the pair if the player doesn't already have a name
+            const Basic::Identifier* id = ip->getName();
+            if (id == nullptr) {
+               ip->setName(*pair->slot());
+            }
+            else if (id->isEmpty()) {
+               ip->setName(*pair->slot());
+            }
 
             // Insert the player into the new list in sorted order
             insertPlayerSort(pair, newList);
@@ -452,7 +459,14 @@ void Simulation::reset()
 
                // reinstated the container pointer and player name
                ip->container(this);
-               ip->setName(*pair->slot());
+               // set the name as the slot of the pair if the player doesn't already have a name
+               const Basic::Identifier* id = ip->getName();
+               if (id == nullptr) {
+                  ip->setName(*pair->slot());
+               }
+               else if (id->isEmpty()) {
+                  ip->setName(*pair->slot());
+               }
 
                // Insert the IPlayer into the new list in sorted order
                insertPlayerSort(pair, newList);
@@ -1351,7 +1365,14 @@ bool Simulation::setSlotPlayers(Basic::PairStream* const pl)
          item = item->getNext();
          Player* ip = static_cast<Player*>(pair->object());
          ip->container(this);
-         ip->setName(*pair->slot());
+         // set the name as the slot of the pair if the player doesn't already have a name
+         const Basic::Identifier* id = ip->getName();
+         if (id == nullptr) {
+            ip->setName(*pair->slot());
+         }
+         else if (id->isEmpty()) {
+            ip->setName(*pair->slot());
+         }
       }
 
       // Set the original player list pointer
@@ -1468,7 +1489,14 @@ void Simulation::updatePlayerList()
             
             // Set container and name
             ip->container(this);
-            ip->setName(*newPlayer->slot());
+            // set the name as the slot of the pair if the player doesn't already have a name
+            const Basic::Identifier* id = ip->getName();
+            if (id == nullptr) {
+               ip->setName(*newPlayer->slot());
+            }
+            else if (id->isEmpty()) {
+               ip->setName(*newPlayer->slot());
+            }
 
             // Insert the new player into the new list in sorted order
             insertPlayerSort(newPlayer, newList);

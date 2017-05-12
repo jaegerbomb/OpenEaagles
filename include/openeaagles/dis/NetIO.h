@@ -126,7 +126,8 @@ class NetIO : public Simulation::NetIO
 
 public:
    // Max PDU buffer size
-   enum { MAX_PDU_SIZE = 1536 };
+   //enum { MAX_PDU_SIZE = 1536 };
+   enum { MAX_PDU_SIZE = 4100 };
 
    // Standard (IST-CF-03-01, May 5, 2003) entity type "kind" codes [ 0 .. 9 ]
    enum EntityTypeKindEnum {

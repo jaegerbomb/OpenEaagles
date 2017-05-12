@@ -102,7 +102,8 @@ BEGIN_SLOTTABLE(Player)
    "testYawRate",       // 35) Test heading rate (units per second)
    "testBodyAxis",      // 36) Test rates are in body coordinates else Euler rates (default: false)
 
-   "useCoordSys"        // 37) Coord system to use for position updating { WORLD, GEOD, LOCAL }
+   "useCoordSys",       // 37) Coord system to use for position updating { WORLD, GEOD, LOCAL }
+   "name"               // 38) Name of the player (for NIB entity marking)
 END_SLOTTABLE(Player)
 
 // Map slot table to handles
@@ -171,6 +172,7 @@ BEGIN_SLOT_MAP(Player)
    ON_SLOT(36, setSlotTestBodyAxis, Basic::Number)
 
    ON_SLOT(37, setSlotUseCoordSys, Basic::String)
+   ON_SLOT(38, setSlotPlayerName, Basic::String)
 END_SLOT_MAP()
 
 //------------------------------------------------------------------------------
@@ -4185,6 +4187,13 @@ bool Player::setSlotUseCoordSys(Basic::String* const msg)
    return ok;
 }
 
+bool Player::setSlotPlayerName(Basic::String* const msg)
+{
+   pname = msg->getString();
+   return true;
+}
+
+
 // signature: Player's RCS signature
 bool Player::setSlotSignature(RfSignature* const s)
 {
@@ -4578,6 +4587,9 @@ std::ostream& Player::serialize(std::ostream& sout, const int i, const bool slot
       indent(sout, i+j);
       sout << "enableNetOutput: false" << std::endl;
    }
+
+   indent(sout, i + j);
+   sout << "name: " << pname << std::endl;
 
    indent(sout,i+j);
    sout << "dataLogTime: ( Seconds " << dataLogTime << " )" << std::endl;

@@ -547,7 +547,7 @@ void NetIO::updateOutputList()
          while (i < nOutNibs) {
             if (outputList[i]->isMode(Player::DELETE_REQUEST)) {
                // Deleting this NIB
-               std::cout << "NetIO::updateOutputList() cleanup: nib = " << outputList[i] << std::endl;
+               //std::cout << "NetIO::updateOutputList() cleanup: nib = " << outputList[i] << std::endl;
                destroyOutputNib(outputList[i++]);
             }
             else {

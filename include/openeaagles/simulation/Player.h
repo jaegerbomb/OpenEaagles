@@ -986,6 +986,7 @@ public:
    virtual bool setSlotSide(Basic::String* const msg);
    virtual bool setSlotInitMode(Basic::String* const msg);
    virtual bool setSlotUseCoordSys(Basic::String* const msg);
+   virtual bool setSlotPlayerName(Basic::String* const msg);
 
    virtual bool setSlotSignature(RfSignature* const msg);
    virtual bool setSlotIrSignature(IrSignature* const msg);
