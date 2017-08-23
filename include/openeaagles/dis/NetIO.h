@@ -376,12 +376,14 @@ protected:
    virtual void testOutputEntityTypes(const unsigned int);   // Test quick lookup of outgoing entity types
    virtual void testInputEntityTypes(const unsigned int);    // Test quick lookup of incoming entity types
 
+protected:
+   SPtr<Basic::NetHandler>   netInput;          // Input network handler
+   SPtr<Basic::NetHandler>   netOutput;         // Output network handler
+
 private:
     void checkDetonationManually(const DetonationPDU* const pdu) const;
     void initData();
 
-    SPtr<Basic::NetHandler>   netInput;          // Input network handler
-    SPtr<Basic::NetHandler>   netOutput;         // Output network handler
     unsigned char             version;           // Version number [ 0 .. 6 ]
 
    // Network Model IDs

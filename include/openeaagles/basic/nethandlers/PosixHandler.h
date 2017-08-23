@@ -92,6 +92,8 @@ public:
    // the actual number of bytes received.
    virtual unsigned int recvData(char* const packet, const int maxSize);
 
+   char* getLocalIPAddress() const { return  localIpAddr;  }
+
    // Set our socket for blocked (wait) I/O
    virtual bool setBlocked();
 
