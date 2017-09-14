@@ -889,6 +889,9 @@ unsigned char Nib::manageArticulationParameters(EntityStatePDU* const pdu)
       ap++;
    }
 
+   // Lee - update to add any more articulated parts
+   getPlayer()->updateArticulatedParts(cnt, (void*)ap);
+
    return cnt;
 }
 

@@ -1011,6 +1011,9 @@ public:
    virtual bool setSlotTestYawRate(const Basic::Angle* const msg);
    virtual bool setSlotTestBodyAxis(const Basic::Number* const msg);
 
+   // Lee - handle articulated parameters for special players
+   virtual void updateArticulatedParts(unsigned char&, void*)   {}
+
    // Special function to update appearance bits that are special to the player (ie.. unused bits or the like)
    // This currently is only used for LifeForm types.
    virtual unsigned int getCustomAppearanceBits() const { return 0; };
