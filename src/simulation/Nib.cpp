@@ -679,6 +679,14 @@ bool Nib::isPlayerStateUpdateRequired(const LCreal curExecTime)
       }
    }
 
+   // Lee - catch all for players to determine if they need updated
+   if (result != YES) {
+      int thisResult = player->customEntityUpdate();
+      if (thisResult == 1) {
+         result = YES;
+      }
+   }
+
 
    return (result == YES);
 }

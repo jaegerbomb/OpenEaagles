@@ -365,7 +365,7 @@ class Track;
 //------------------------------------------------------------------------------
 class Player : public Basic::Component
 {
-   DECLARE_SUBCLASS(Player,Basic::Component)
+   DECLARE_SUBCLASS(Player, Basic::Component)
 
 public:
 
@@ -383,24 +383,24 @@ public:
 
    // Major player type (bits)
    enum MajorType {
-      GENERIC        = 0x01,  // Unknown type of player
-      AIR_VEHICLE    = 0x02,  // Air Player
+      GENERIC = 0x01,  // Unknown type of player
+      AIR_VEHICLE = 0x02,  // Air Player
       GROUND_VEHICLE = 0x04,  // Ground Player
-      WEAPON         = 0x08,  // Weapon Player
-      SHIP           = 0x10,  // Ship or subsurface player
-      BUILDING       = 0x20,  // Building
-      LIFE_FORM      = 0x40,  // Life Form
-      SPACE_VEHICLE  = 0x80   // Space Player
+      WEAPON = 0x08,  // Weapon Player
+      SHIP = 0x10,  // Ship or subsurface player
+      BUILDING = 0x20,  // Building
+      LIFE_FORM = 0x40,  // Life Form
+      SPACE_VEHICLE = 0x80   // Space Player
    };
 
    // Player sides (bits)
    enum Side {
-      BLUE     = 0x01,        // Blue force
-      RED      = 0x02,        // Red force
-      YELLOW   = 0x04,        // 3rd force
-      CYAN     = 0x08,        // 4th force
-      GRAY     = 0x10,        // Neutral force
-      WHITE    = 0x20         // Commercial/Civilian
+      BLUE = 0x01,        // Blue force
+      RED = 0x02,        // Red force
+      YELLOW = 0x04,        // 3rd force
+      CYAN = 0x08,        // 4th force
+      GRAY = 0x10,        // Neutral force
+      WHITE = 0x20         // Commercial/Civilian
    };
 
    // Coordinate system to use (or being used) for updating player position
@@ -473,18 +473,18 @@ public:
    const osg::Quat& getQuaternions() const;        // Rotational Quaternions
 
    const osg::Matrixd& getRotMat() const;          // Rotational Matrix: (directional cosines)
-                                                   //    Matrix: M = Rx[roll] * Ry[pitch] * Rz[yaw]
-                                                   //    Usage:
-                                                   //       Vb = M * Vi
-                                                   //       Vi  = Vb * M
-                                                   //    Where: 'Vb' is a body vector; 'Vi' is an inertial vector
+   //    Matrix: M = Rx[roll] * Ry[pitch] * Rz[yaw]
+   //    Usage:
+   //       Vb = M * Vi
+   //       Vi  = Vb * M
+   //    Where: 'Vb' is a body vector; 'Vi' is an inertial vector
 
    const osg::Matrixd& getRotMatW2B() const;       // Rotational Matrix: world to body
-                                                   //    Matrix: M = Rx[roll] * Ry[pitch] * Rz[yaw] * Ry[-(90+lat)] * Rz[lon]
-                                                   //    Usage:
-                                                   //       Vb = M * Vw
-                                                   //       Vw  = Vb * M
-                                                   //    Where: 'Vb' is a body vector; 'Vw' is a world (ECEF) vector
+   //    Matrix: M = Rx[roll] * Ry[pitch] * Rz[yaw] * Ry[-(90+lat)] * Rz[lon]
+   //    Usage:
+   //       Vb = M * Vw
+   //       Vw  = Vb * M
+   //    Where: 'Vb' is a body vector; 'Vw' is a world (ECEF) vector
 
    const osg::Vec3d& getGeocEulerAngles() const;   // Geocentric (body/ECEF) Euler angles
 
@@ -497,12 +497,12 @@ public:
    double getLongitude() const;                    // Player's longitude (degrees)
 
    const osg::Matrixd& getWorldMat() const;        // World transformation matrix:
-                                                   //    Local inertial tangent plane (NED) <==> World (ECEF)
-                                                   //    Matrix: M = Ry[-(90+lat)] * Rz[lon]
-                                                   //    Usage:
-                                                   //       Vi = M * Vw;
-                                                   //       Vw  = Vi * M
-                                                   //    Where: 'Vw' is a world(ECEF) vector; 'Vi' is an inertial (NED) vector
+   //    Local inertial tangent plane (NED) <==> World (ECEF)
+   //    Matrix: M = Ry[-(90+lat)] * Rz[lon]
+   //    Usage:
+   //       Vi = M * Vw;
+   //       Vw  = Vi * M
+   //    Where: 'Vw' is a world(ECEF) vector; 'Vi' is an inertial (NED) vector
 
    double getEarthRadius() const;                  // Earth radius at player's location (meters)
 
@@ -602,10 +602,10 @@ public:
    bool isDtedTerrainInterpolationEnabled() const; // Interpolate our terrain from DTED if true
 
    bool isTerrainElevationRequired() const;        // True if terrain elevation is required from the OTW system;
-                                                   // otherwise we use DTED, if available
+   // otherwise we use DTED, if available
 
    CoordSys getCoordSystemInUse() const;           // Returns the coordinate system currently being used to
-                                                   // update the player's position
+   // update the player's position
 
    // ---
    // Interoperability network data
@@ -759,7 +759,7 @@ public:
    virtual bool setTerrainElevationRequired(const bool b);     // Sets OTW terrain elevation request flag
 
    virtual void setOkToSerialize(const bool x)  { okToSerialize = x; }
-   bool isOkToSerialize() const                 { return okToSerialize;  }
+   bool isOkToSerialize() const                 { return okToSerialize; }
 
    // ---
    // Set the player's position
@@ -798,7 +798,7 @@ public:
    virtual bool setGeocPosition(const osg::Vec3d& gcPos, const bool slaved = false);
 
    // Lee - function to allow altitude lookup prior to detonation check
-   virtual void preProcessDetonation(osg::Vec3d& weaponWorldPOs); 
+   virtual void preProcessDetonation(osg::Vec3d& weaponWorldPOs);
 
    // ---
    // Set the player's orientation angles (roll, pitch and yaw)
@@ -1013,6 +1013,7 @@ public:
 
    // Lee - handle articulated parameters for special players
    virtual void updateArticulatedParts(unsigned char&, void*)   {}
+   virtual int customEntityUpdate() const { return 0; }
 
    // Special function to update appearance bits that are special to the player (ie.. unused bits or the like)
    // This currently is only used for LifeForm types.
