@@ -357,25 +357,25 @@ void NetIO::netInputHander()
                   }
                   break;
 
-                  case PDU_DATA: {
-                     DataPDU* pPdu = reinterpret_cast<DataPDU*>(header);
-                     if (Basic::NetHandler::isNotNetworkByteOrder()) pPdu->swapBytes();
-                     if (getSiteID() != pPdu->originatingID.simulationID.siteIdentification ||
-                        getApplicationID() != pPdu->originatingID.simulationID.applicationIdentification) {
-                           processDataPDU(pPdu);
-                     }
-                  }
-                  break;
+                  //case PDU_DATA: {
+                  //   DataPDU* pPdu = reinterpret_cast<DataPDU*>(header);
+                  //   if (Basic::NetHandler::isNotNetworkByteOrder()) pPdu->swapBytes();
+                  //   if (getSiteID() != pPdu->originatingID.simulationID.siteIdentification ||
+                  //      getApplicationID() != pPdu->originatingID.simulationID.applicationIdentification) {
+                  //         processDataPDU(pPdu);
+                  //   }
+                  //}
+                  //break;
 
-                  case PDU_SET_DATA: {
-                     SetDataPDU* pPdu = reinterpret_cast<SetDataPDU*>(header);
-                     if (Basic::NetHandler::isNotNetworkByteOrder()) pPdu->unpack();
-                     if (getSiteID() != pPdu->originatingID.simulationID.siteIdentification ||
-                        getApplicationID() != pPdu->originatingID.simulationID.applicationIdentification) {
-                        processSetDataPDU(pPdu);
-                     }
-                  }
-                  break;
+                  //case PDU_SET_DATA: {
+                  //   SetDataPDU* pPdu = reinterpret_cast<SetDataPDU*>(header);
+                  //   if (Basic::NetHandler::isNotNetworkByteOrder()) pPdu->unpack();
+                  //   if (getSiteID() != pPdu->originatingID.simulationID.siteIdentification ||
+                  //      getApplicationID() != pPdu->originatingID.simulationID.applicationIdentification) {
+                  //      processSetDataPDU(pPdu);
+                  //   }
+                  //}
+                  //break;
 
                   case PDU_COMMENT: {
                      CommentPDU* pPdu = reinterpret_cast<CommentPDU*>(header);
