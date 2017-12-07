@@ -1418,6 +1418,7 @@ void Simulation::updatePlayerList()
     // Second, check for delete requests
     if (!yes) {
         SPtr<Basic::PairStream> pl = players;
+		if (pl == nullptr) return;
         Basic::List::Item* item = pl->getFirstItem();
         while (!yes && item != 0) {
             Basic::Pair* pair = static_cast<Basic::Pair*>(item->getValue());
