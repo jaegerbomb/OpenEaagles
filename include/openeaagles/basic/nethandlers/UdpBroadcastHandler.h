@@ -40,6 +40,8 @@ class UdpBroadcastHandler : public PosixHandler
 public:
     UdpBroadcastHandler();
 
+	char* getNetworkMask() const { return networkMask; }
+
     // Slot Functions
     virtual bool setSlotNetworkMask(const String* const msg);
 
