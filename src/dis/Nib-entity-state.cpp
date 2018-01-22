@@ -619,10 +619,8 @@ bool Nib::entityStateManager(const LCreal curExecTime)
                if (bits != 0) {
                   pdu->appearance |= (bits << 16);
                }
-               else {
-                  bits = player->getCustomAppearanceBits();
-                  pdu->appearance |= bits;
-               }
+               bits = player->getCustomAppearanceBits();
+               pdu->appearance |= bits;
 
                // bit 20 unused
                // bit 21 frozen status (taken care of above)
