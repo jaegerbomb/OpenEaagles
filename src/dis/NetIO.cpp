@@ -447,6 +447,13 @@ void NetIO::netInputHander()
                   }
                   break;
 
+				  case PDU_DESIGNATOR: {
+					  DesignatorPDU* pPdu = reinterpret_cast<DesignatorPDU*>(header);
+					  if (Basic::NetHandler::isNotNetworkByteOrder()) pPdu->swapBytes();
+				      processDesignatorPDU(pPdu);
+				  }
+				  break;
+
                   default: {
                      // Note: users will need to do their own byte swapping and checks
                      processUserPDU(header);
@@ -583,6 +590,15 @@ bool NetIO::processActionResponsePDU_R(const Eaagles::Network::Dis::ActionRespon
 {
     return true;
 }
+
+//------------------------------------------------------------------------------
+// processActionResponsePDU_R() callback --
+//------------------------------------------------------------------------------
+bool NetIO::processDesignatorPDU(const Eaagles::Network::Dis::DesignatorPDU* const)
+{
+	return true;
+}
+
 
 //------------------------------------------------------------------------------
 // User defined function to process unknown PDUs (PDU bytes are still in network order)

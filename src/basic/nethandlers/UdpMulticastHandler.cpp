@@ -188,7 +188,7 @@ bool UdpMulticastHandler::bindSocket()
        bzero(&addr, sizeof(addr));
        addr.sin_family = AF_INET;
 #if defined(WIN32)
-       addr.sin_addr.s_addr = INADDR_ANY;
+       addr.sin_addr.s_addr = ::inet_addr(getLocalIPAddress());
 #else
        addr.sin_addr.s_addr = ::inet_addr(multicastGroup);
 #endif

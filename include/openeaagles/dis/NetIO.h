@@ -45,6 +45,7 @@ namespace Dis {
    struct ActionRequestPDU;
    struct ActionRequestPDU_R;
    struct ActionResponsePDU_R;
+   struct DesignatorPDU;
 
 
 //==============================================================================
@@ -319,6 +320,7 @@ protected:
    virtual bool processActionRequestPDU(const ActionRequestPDU* const pdu);
    virtual bool processActionRequestPDU_R(const ActionRequestPDU_R* const pdu);
    virtual bool processActionResponsePDU_R(const ActionResponsePDU_R* const pdu);
+   virtual bool processDesignatorPDU(const DesignatorPDU* const pdu);
 
    // User defined function to process unknown PDUs (PDU bytes are still in network order)
    virtual bool processUserPDU(const PDUHeader* const pdu);

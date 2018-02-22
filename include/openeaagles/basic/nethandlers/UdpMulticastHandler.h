@@ -85,6 +85,8 @@ public:
     virtual bool isConnected() const;
     virtual bool closeConnection();
 
+     char* groupAddress() const { return multicastGroup; }
+
 protected:
     virtual bool joinTheGroup();
 

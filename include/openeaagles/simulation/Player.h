@@ -1033,7 +1033,7 @@ protected:
    virtual void dynamics(const LCreal  dt = 0.0);
 
    // Position update (local players only)
-   void positionUpdate(const LCreal dt);
+   virtual void positionUpdate(const LCreal dt);
 
    // Dead-reckoning (networked I-players only)
    void deadReckonPosition(const LCreal dt);
