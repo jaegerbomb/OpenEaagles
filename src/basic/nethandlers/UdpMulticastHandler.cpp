@@ -67,7 +67,7 @@ END_SLOT_MAP()
 UdpMulticastHandler::UdpMulticastHandler() : multicastGroup(0)
 {
     STANDARD_CONSTRUCTOR()
-    setTTL(1);
+    setTTL(64);
     setLoopback(true);
     initialized = false;
 }
