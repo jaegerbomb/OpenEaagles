@@ -616,10 +616,13 @@ bool Nib::entityStateManager(const LCreal curExecTime)
                else if (lf->getActionState() == Simulation::LifeForm::WADING) bits = 13;           // wading
                else if (lf->getActionState() == Simulation::LifeForm::SURRENDER) bits = 14;        // surrender
                else if (lf->getActionState() == Simulation::LifeForm::DETAINED) bits = 15;         // detained
-			   if (bits == 0) {
-				   bits |= player->getCustomAppearanceBits();
+			   if (bits != 0) {
+				   pdu->appearance |= (bits << 16);
+			   }			   
+			   else {
+				   bits = player->getCustomAppearanceBits();
+                                   pdu->appearance |= bits;
 			   }
-               pdu->appearance = bits;
 
 
                // bit 20 unused
