@@ -251,6 +251,14 @@ void Player::initData()
    type = 0;
    setType(&generic);
 
+   mDISEnum.kind = 0;
+   mDISEnum.domain= 0;
+   mDISEnum.country = 0;
+   mDISEnum.category = 0;
+   mDISEnum.subcategory = 0;
+   mDISEnum.specific = 0;
+   mDISEnum.extra = 0;
+
    id = 0;
    pname = "";
    side = GRAY;
@@ -802,6 +810,11 @@ unsigned int Player::getMajorType() const
 LCreal Player::getGrossWeight() const
 {
    return 0.0;
+}
+
+void Player::setDISEnum(DISEnum x) 
+{
+	mDISEnum = x;
 }
 
 // Default: mach number

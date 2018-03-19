@@ -363,7 +363,7 @@ public:
    // Finds the network type mapper by NIB type codes
    virtual const Ntm* findNetworkTypeMapper(const Nib* const nib) const;
 
-   // Finds the network type mapper by Player
+   // Finds the network type mapper by Player	
    virtual const Ntm* findNetworkTypeMapper(const Player* const p) const;
 
    // Finds network type mapper by string

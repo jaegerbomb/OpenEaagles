@@ -417,6 +417,31 @@ public:
 public:
    Player();
 
+
+   // Lee - easy way to store enums for players type
+   struct DISEnum {
+	   int kind;
+	   int domain;
+	   int country;
+	   int category;
+	   int subcategory;
+	   int specific;
+	   int extra;
+	   void operator =(const DISEnum& other) {
+		   kind = other.kind;
+		   domain = other.domain;
+		   country = other.country;
+		   category = other.category;
+		   subcategory = other.subcategory;
+		   specific = other.specific;
+		   extra = other.extra;
+		}
+   };
+
+   DISEnum disEnumeration() const { return mDISEnum; }
+   void setDISEnum(DISEnum x);
+
+
    // ---
    // Type and ID
    // ---
@@ -1231,6 +1256,8 @@ private:
 
    // Serialize flag - use this when we don't want to save a player
    bool okToSerialize;
+
+   DISEnum mDISEnum;
 };
 
 // -----------------------------------------------------------------------------
