@@ -103,7 +103,8 @@ BEGIN_SLOTTABLE(Player)
    "testBodyAxis",      // 36) Test rates are in body coordinates else Euler rates (default: false)
 
    "useCoordSys",       // 37) Coord system to use for position updating { WORLD, GEOD, LOCAL }
-   "name"               // 38) Name of the player (for NIB entity marking)
+   "name",               // 38) Name of the player (for NIB entity marking)
+   "disEnum",			// 39) Holds the players DIS Enumeration, in string form
 END_SLOTTABLE(Player)
 
 // Map slot table to handles
@@ -173,6 +174,7 @@ BEGIN_SLOT_MAP(Player)
 
    ON_SLOT(37, setSlotUseCoordSys, Basic::String)
    ON_SLOT(38, setSlotPlayerName, Basic::String)
+   ON_SLOT(39, setSlotDISEnum, Basic::String)
 END_SLOT_MAP()
 
 //------------------------------------------------------------------------------
@@ -3730,6 +3732,12 @@ bool Player::setStoresMgr(Basic::Pair* const sys)
 //------------------------------------------------------------------------------
 // Slot functions
 //------------------------------------------------------------------------------
+
+bool Player::setSlotDISEnum(const Basic::String* const string)
+{
+	std::cout << "Player::setSlotDisENum() - default call." << std::endl;
+	return true;
+}
 
 // initXPos: X position (+north)
 bool Player::setSlotInitXPos(const Basic::Distance* const msg)

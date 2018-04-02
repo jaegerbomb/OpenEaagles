@@ -979,6 +979,8 @@ public:
    // ---
    // Slot functions
    // ---
+   // Lee
+   virtual bool setSlotDISEnum(const Basic::String* const msg);
    virtual bool setSlotInitXPos(const Basic::Distance* const msg);
    virtual bool setSlotInitXPos(const Basic::Number* const msg);
    virtual bool setSlotInitYPos(const Basic::Distance* const msg);
