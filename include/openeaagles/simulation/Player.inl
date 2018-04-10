@@ -191,6 +191,16 @@ inline double Player::getHeadingR() const
    return angles[IYAW];
 }
 
+inline double Player::getInitHeadingR() const
+{
+	return initAngles[IYAW];
+}
+
+inline void Player::setInitHeadingR(const double x)
+{
+	initAngles[IYAW] = x;
+}
+
 // Yaw Euler angle (degs)
 inline double Player::getHeadingD() const
 {

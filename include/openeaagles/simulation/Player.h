@@ -491,6 +491,8 @@ public:
    double getHeading() const;                      // Yaw Euler angle (radians) by default
    double getHeadingR() const;                     // Yaw Euler angle (radians)
    double getHeadingD() const;                     // Yaw Euler angle (degrees)
+   void setInitHeadingR(const double x);
+   double getInitHeadingR() const;
    double getSinHeading() const;                   // Sin of the yaw Euler angle
    double getCosHeading() const;                   // Cos of the  yaw Euler angle
 
