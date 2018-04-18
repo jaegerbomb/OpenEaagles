@@ -3182,6 +3182,15 @@ void Player::positionUpdate(const LCreal dt)
          double ve0 = velVecN1.y();
          double we0 = velVecN1.z();
 
+		 // cacluate acceleration
+		 double ueDiff = ue - ue0;
+		 double veDiff = ve - ve0;
+		 double weDiff = we - we0;
+		 Eaagles::osg::Vec3d diff(ueDiff, veDiff, weDiff);
+		 diff /= dt;
+		 setAcceleration(diff);
+		 std::cout << "ACCELERATION = " << diff.x() << ", " << diff.y() << ", " << diff.z() << std::endl;
+
          if (!pfrz) {
             newPosVecNED[INORTH] += (ue + ue0) * 0.5 * dt;
             newPosVecNED[IEAST]  += (ve + ve0) * 0.5 * dt;
@@ -3229,6 +3238,15 @@ void Player::positionUpdate(const LCreal dt)
          double ue0 = velVecN1.x();
          double ve0 = velVecN1.y();
          double we0 = velVecN1.z();
+
+		 // cacluate acceleration
+		 double ueDiff = ue - ue0;
+		 double veDiff = ve - ve0;
+		 double weDiff = we - we0;
+		 Eaagles::osg::Vec3d diff(ueDiff, veDiff, weDiff);
+		 diff /= dt;
+		 setAcceleration(diff);
+		 std::cout << "ACCELERATION = " << diff.x() << ", " << diff.y() << ", " << diff.z() << std::endl;
 
          if (!pfrz) {
 
@@ -3325,6 +3343,26 @@ void Player::positionUpdate(const LCreal dt)
                setPositionLLA(lla[Basic::Nav::ILAT], lla[Basic::Nav::ILON], alt);
             }
          }
+
+		 // Current velocities
+		 double ue = velVecECEF.x();
+		 double ve = velVecECEF.y();
+		 double we = velVecECEF.z();
+
+		 // Previous velocities
+		 double ue0 = velVecN1.x();
+		 double ve0 = velVecN1.y();
+		 double we0 = velVecN1.z();
+
+
+		 // cacluate acceleration
+		 double ueDiff = ue - ue0;
+		 double veDiff = ve - ve0;
+		 double weDiff = we - we0;
+		 Eaagles::osg::Vec3d diff(ueDiff, veDiff, weDiff);
+		 diff /= dt;
+		 setAcceleration(diff);
+		 std::cout << "ACCELERATION = " << diff.x() << ", " << diff.y() << ", " << diff.z() << std::endl;
 
          // And save our old velocity vector
          velVecN1 = velVecECEF;
