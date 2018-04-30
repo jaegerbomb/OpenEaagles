@@ -3183,13 +3183,18 @@ void Player::positionUpdate(const LCreal dt)
          double we0 = velVecN1.z();
 
 		 // cacluate acceleration
-		 double ueDiff = ue - ue0;
-		 double veDiff = ve - ve0;
-		 double weDiff = we - we0;
-		 Eaagles::osg::Vec3d diff(ueDiff, veDiff, weDiff);
-		 diff /= dt;
-		 setAcceleration(diff);
-		 std::cout << "ACCELERATION = " << diff.x() << ", " << diff.y() << ", " << diff.z() << std::endl;
+		 if (getMajorType() != LIFE_FORM) {
+			 double ueDiff = ue - ue0;
+			 double veDiff = ve - ve0;
+			 double weDiff = we - we0;
+			 Eaagles::osg::Vec3d diff(ueDiff, veDiff, weDiff);
+			 diff /= dt;
+			 double len2 = diff.length2();
+			 if (len2 > (9.8 * 9.8)) {
+				 diff *= (9.8 / sqrt(len2));
+			 }
+			 setAcceleration(diff);
+		 }
 
          if (!pfrz) {
             newPosVecNED[INORTH] += (ue + ue0) * 0.5 * dt;
@@ -3240,13 +3245,18 @@ void Player::positionUpdate(const LCreal dt)
          double we0 = velVecN1.z();
 
 		 // cacluate acceleration
-		 double ueDiff = ue - ue0;
-		 double veDiff = ve - ve0;
-		 double weDiff = we - we0;
-		 Eaagles::osg::Vec3d diff(ueDiff, veDiff, weDiff);
-		 diff /= dt;
-		 setAcceleration(diff);
-		 std::cout << "ACCELERATION = " << diff.x() << ", " << diff.y() << ", " << diff.z() << std::endl;
+		 if (getMajorType() != LIFE_FORM) {
+			 double ueDiff = ue - ue0;
+			 double veDiff = ve - ve0;
+			 double weDiff = we - we0;
+			 Eaagles::osg::Vec3d diff(ueDiff, veDiff, weDiff);
+			 diff /= dt;
+			 double len2 = diff.length2();
+			 if (len2 > (9.8 * 9.8)) {
+				 diff *= (9.8 / sqrt(len2));
+			 }
+			 setAcceleration(diff);
+		 }
 
          if (!pfrz) {
 
@@ -3356,18 +3366,27 @@ void Player::positionUpdate(const LCreal dt)
 
 
 		 // cacluate acceleration
-		 double ueDiff = ue - ue0;
-		 double veDiff = ve - ve0;
-		 double weDiff = we - we0;
-		 Eaagles::osg::Vec3d diff(ueDiff, veDiff, weDiff);
-		 diff /= dt;
-		 setAcceleration(diff);
-		 std::cout << "ACCELERATION = " << diff.x() << ", " << diff.y() << ", " << diff.z() << std::endl;
+		 if (getMajorType() != LIFE_FORM) {
+			 double ueDiff = ue - ue0;
+			 double veDiff = ve - ve0;
+			 double weDiff = we - we0;
+			 Eaagles::osg::Vec3d diff(ueDiff, veDiff, weDiff);
+			 diff /= dt;
+			 double len2 = diff.length2();
+			 if (len2 > (9.8 * 9.8)) {
+				 diff *= (9.8 / sqrt(len2));
+			 }
+			 setAcceleration(diff);
+		 }
 
          // And save our old velocity vector
          velVecN1 = velVecECEF;
       }
-
+   }
+   else {
+	   if (getAcceleration().length() > 0.0) {
+		   setAcceleration(Eaagles::osg::Vec3d(0, 0, 0));
+	   }
    }
 
    // ---

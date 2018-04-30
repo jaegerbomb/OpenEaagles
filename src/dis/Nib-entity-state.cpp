@@ -616,14 +616,9 @@ bool Nib::entityStateManager(const LCreal curExecTime)
                else if (lf->getActionState() == Simulation::LifeForm::WADING) bits = 13;           // wading
                else if (lf->getActionState() == Simulation::LifeForm::SURRENDER) bits = 14;        // surrender
                else if (lf->getActionState() == Simulation::LifeForm::DETAINED) bits = 15;         // detained
-			   if (bits != 0) {
-				   pdu->appearance |= (bits << 16);
-			   }			   
-			   else {
-				   bits = player->getCustomAppearanceBits();
-                                   pdu->appearance |= bits;
-			   }
-
+			   pdu->appearance |= (bits << 16);
+			   unsigned int pBits = player->getCustomAppearanceBits();
+			   pdu->appearance |= pBits;
 
                // bit 20 unused
                // bit 21 frozen status (taken care of above)
@@ -680,6 +675,7 @@ bool Nib::entityStateManager(const LCreal curExecTime)
          pdu->DRentityLinearAcceleration.component[0] = (float)geocAcc[0];
          pdu->DRentityLinearAcceleration.component[1] = (float)geocAcc[1];
          pdu->DRentityLinearAcceleration.component[2] = (float)geocAcc[2];
+		 //std::cout << "DR ACCEL = " << geocAcc[0] << ", " << geocAcc[1] << ", " << geocAcc[2] << std::endl;
 
          // ---
          // Dead reckoning angular velocity (AngularVelocityVectorDIS)
