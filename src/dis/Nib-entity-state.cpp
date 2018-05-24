@@ -600,7 +600,7 @@ bool Nib::entityStateManager(const LCreal curExecTime)
                // bits 13-15 unused
                // bits 16 - 19 life form state
                // data is from the player, because NIB doesn't have actions associated with it
-               unsigned int bits = 0;      
+			   unsigned int bits = 0;
                if (lf->getActionState() == Simulation::LifeForm::UPRIGHT_STANDING) bits = 1;       // standing
                else if (lf->getActionState() == Simulation::LifeForm::UPRIGHT_WALKING) bits = 2;   // walking
                else if (lf->getActionState() == Simulation::LifeForm::UPRIGHT_RUNNING) bits = 3;   // running
@@ -616,11 +616,13 @@ bool Nib::entityStateManager(const LCreal curExecTime)
                else if (lf->getActionState() == Simulation::LifeForm::WADING) bits = 13;           // wading
                else if (lf->getActionState() == Simulation::LifeForm::SURRENDER) bits = 14;        // surrender
                else if (lf->getActionState() == Simulation::LifeForm::DETAINED) bits = 15;         // detained
-			   pdu->appearance |= (bits << 16);
+			   if (bits != 0) {
+				   pdu->appearance |= (bits << 16);	
+			   }
+			   // bit 20 will be used as custom appearance bits, and 24 will be used for weapons
 			   unsigned int pBits = player->getCustomAppearanceBits();
 			   pdu->appearance |= pBits;
 
-               // bit 20 unused
                // bit 21 frozen status (taken care of above)
                // bits 24 - 25 weapon 1 (not implemented)
                // bits 26-27 weapon 2 (N/I)
