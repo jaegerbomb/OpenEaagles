@@ -99,6 +99,11 @@ void LifeForm::reset()
    BaseClass::reset();
 }
 
+bool LifeForm::alibisToSendEntityState() const
+{
+	return false;
+}
+
 void LifeForm::fire()
 {
     Basic::Number* hdgObj = new Basic::Number(getHeadingR());

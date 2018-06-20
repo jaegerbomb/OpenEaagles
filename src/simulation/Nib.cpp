@@ -532,7 +532,14 @@ bool Nib::isPlayerStateUpdateRequired(const LCreal curExecTime)
                lf->getActionState() != getActionState()) {
                result = YES;
             }
-         }
+			// finally, catchall for life forms
+			if (result == UNSURE) {
+				bool send = lf->alibisToSendEntityState();
+				if (send) {
+					result = YES;
+				}
+			}
+		 }
       }
 
    }

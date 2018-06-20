@@ -61,6 +61,9 @@ public:
     int getWeaponSelMode() const { return weaponSel; }
     virtual void reset();
 
+	// Lee
+	virtual bool alibisToSendEntityState() const;
+
 protected:
    virtual bool computeActionState();
    // Basic::Component protected interface
