@@ -52,7 +52,7 @@ void NetIO::checkDetonationManually(const DetonationPDU* const pdu) const
          // player that we are indeed a made up weapon, and the weapon's position will be in world
          // coordinates instead of relative position.
          // default weapon parameters (not very deadly)
-         LCreal maxBurstRange = 25.0f;
+         LCreal maxBurstRange = 1.0f;
          LCreal maxLethalRange = 0.5;
          // find the missile based on the enumerated type that came in!
          const Dis::Ntm* ntm = findNtmByTypeCodes(pdu->burst.munition.kind,
