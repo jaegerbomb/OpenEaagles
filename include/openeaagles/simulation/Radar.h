@@ -88,8 +88,8 @@ protected: // (#temporary#) allow subclasses to access and use report queue
    mutable long myLock;
 
    // Queues
-   QQueue<Emission*>   rptQueue;       // Reporting emission queue
-   QQueue<LCreal>      rptSnQueue;     // Reporting Signal/Nose queue  (dB)
+   EQueue<Emission*>   rptQueue;       // Reporting emission queue
+   EQueue<LCreal>      rptSnQueue;     // Reporting Signal/Nose queue  (dB)
 
    // Reports
    Emission*   reports[MAX_REPORTS];   // Best emission for this report

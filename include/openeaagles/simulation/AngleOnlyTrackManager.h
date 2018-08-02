@@ -55,7 +55,7 @@ protected:
    LCreal              oneMinusBeta;       // 1 - Beta parameter
 
 private:
-   QQueue<IrQueryMsg*>   queryQueue;       // Emission input queue (used with the
+   EQueue<IrQueryMsg*>   queryQueue;       // Emission input queue (used with the
                                            //   TrackManager::queueLock semaphore)
 
 };

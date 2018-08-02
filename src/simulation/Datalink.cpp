@@ -68,8 +68,8 @@ void Datalink::initData()
    trackManager = 0;
    tmName = 0;
 
-   inQueue = new QQueue<Basic::Object*>(MAX_MESSAGES);
-   outQueue = new QQueue<Basic::Object*>(MAX_MESSAGES);
+   inQueue = new EQueue<Basic::Object*>(MAX_MESSAGES);
+   outQueue = new EQueue<Basic::Object*>(MAX_MESSAGES);
 }
 
 void Datalink::copyData(const Datalink& org, const bool cc)
@@ -427,7 +427,7 @@ bool Datalink::queueIncomingMessage(Basic::Object* const msg)
    }
 
    //if (isMessageEnabled(MSG_INFO)) {
-   //std::cout << getOwnship()->getID() << "\tincomming QQueue Size: " << inQueue->entries() << std::endl;
+   //std::cout << getOwnship()->getID() << "\tincomming EQueue Size: " << inQueue->entries() << std::endl;
    //}
 
    if(inQueue->isFull()) {
@@ -453,7 +453,7 @@ bool Datalink::queueIncomingMessage(Basic::Object* const msg)
 bool Datalink::queueOutgoingMessage(Basic::Object* const msg)
 {
     //if (isMessageEnabled(MSG_INFO)) {
-    //std::cout << getOwnship()->getID() << "\tOutgoing QQueue Size: " << outQueue->entries() << std::endl;
+    //std::cout << getOwnship()->getID() << "\tOutgoing EQueue Size: " << outQueue->entries() << std::endl;
     //}
 
     if(outQueue->isFull()) {

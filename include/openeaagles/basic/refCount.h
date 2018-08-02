@@ -27,7 +27,7 @@
    //    initialized to one (1) by the constructor).  ExpInvalidRefCount
    //    is thrown if the reference count is invalid.
    // ---
-   void ref() const
+   virtual void ref() const
    {
       lcLock(semaphore);
       if (++(refCount) <= 1) throw new ExpInvalidRefCount();
@@ -46,10 +46,12 @@
    //    Decrements the number of references to this object.
    //    And, when the number of references becomes zero, deletes this object.
    // ---
-   void unref() const
+   virtual void unref() const
    {
       lcLock(semaphore);
-      if (--refCount == 0) delete this;
+      if (--refCount == 0) {
+          delete this;
+      }
       else lcUnlock(semaphore);
    }
 

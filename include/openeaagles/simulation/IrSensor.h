@@ -172,7 +172,7 @@ protected:
    virtual IrQueryMsg* getStoredMessage();
    virtual IrQueryMsg* peekStoredMessage(unsigned int i);
 
-   QQueue<IrQueryMsg*>  storedMessagesQueue;
+   EQueue<IrQueryMsg*>  storedMessagesQueue;
    mutable long storedMessagesLock;          // Semaphore to protect 'storedMessagesQueue'
 
 

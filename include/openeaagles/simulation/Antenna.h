@@ -139,7 +139,7 @@ protected:
    QStack<Emission*> freeEmStack;  // Free emission stack
    mutable long      freeEmLock;   // Semaphore to protect 'freeEmStack'
 
-   QQueue<Emission*> inUseEmQueue; // In use emission queue
+   EQueue<Emission*> inUseEmQueue; // In use emission queue
    mutable long      inUseEmLock;  // Semaphore to protect 'inUseEmQueue'
 
 private:

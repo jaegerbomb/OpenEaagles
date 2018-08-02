@@ -418,7 +418,7 @@ private:
    unsigned short eventWpnID;    // Weapon event ID
    unsigned short relWpnId;      // Current released weapon ID
 
-   QQueue<Basic::Pair*> newPlayerQueue;   // Queue of new players
+   EQueue<Basic::Pair*> newPlayerQueue;   // Queue of new players
 
    IrAtmosphere*          irAtmosphere; // Atmosphere data for IR algorithms
    Basic::Terrain*        terrain;    // Terrain data

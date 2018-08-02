@@ -63,7 +63,7 @@ protected:
    QStack<IrQueryMsg*> freeQueryStack;  // stack of free queries of target IR signatures
    mutable long        freeQueryLock;   // Semaphore to protect 'freeQueryStack'
 
-   QQueue<IrQueryMsg*> inUseQueryQueue; // Queue of in use queries of target IR signatures 
+   EQueue<IrQueryMsg*> inUseQueryQueue; // Queue of in use queries of target IR signatures 
    mutable long        inUseQueryLock;  // Semaphore to protect 'inUseQueryQueue'
 
 private:

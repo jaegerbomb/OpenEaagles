@@ -68,7 +68,7 @@ public:
    virtual bool setNetworkQueueEnabled(const bool flg);
 
    // For network handler to get to the messages
-   QQueue<Basic::Object*>* getOutputQueue()     { return outQueue; }
+   EQueue<Basic::Object*>* getOutputQueue()     { return outQueue; }
 
    TrackManager* getTrackManager()              { return trackManager; }
    const TrackManager* getTrackManager() const  { return trackManager; }
@@ -104,8 +104,8 @@ private:
 
    static const int MAX_MESSAGES = 1000;  // Max number of messages in queues 
 
-   QQueue<Basic::Object*>* inQueue;   // Received message queue  
-   QQueue<Basic::Object*>* outQueue;  // Queue for messages going out over the network/DIS
+   EQueue<Basic::Object*>* inQueue;   // Received message queue  
+   EQueue<Basic::Object*>* outQueue;  // Queue for messages going out over the network/DIS
    double noRadioMaxRange;            // Max range of our datalink (NM)
 
    const Basic::String* radioName;    // Name of our radio

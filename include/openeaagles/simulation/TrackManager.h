@@ -113,8 +113,8 @@ protected:
    unsigned int        nextTrkId;          // Next track ID
    unsigned int        firstTrkId;         // First (starting) track ID
 
-   QQueue<Emission*>   emQueue;            // Emission input queue
-   QQueue<LCreal>      snQueue;            // S/N input queue.
+   EQueue<Emission*>   emQueue;            // Emission input queue
+   EQueue<LCreal>      snQueue;            // S/N input queue.
    mutable long        queueLock;          // Semaphore to protect both emQueue and snQueue
 
    // System class Interface -- phase() callbacks

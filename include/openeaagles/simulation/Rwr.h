@@ -61,7 +61,7 @@ protected:
 private:
    void initData();
 
-   QQueue<Emission*> rptQueue;   // Report queue 
+   EQueue<Emission*> rptQueue;   // Report queue 
 
    LCreal rays[2][NUM_RAYS];     // Back (sensor) buffer [0][*] and front (graphics) buffer [1][*]
 };

@@ -83,7 +83,7 @@ protected:
 
 private:
     static const int MAX_QUEUE_SIZE = 1000;     // Max size of the logger event queue
-    QQueue<SimLogEvent*> seQueue;               // Sim Event Queue
+    EQueue<SimLogEvent*> seQueue;               // Sim Event Queue
 
     double          time;                       // Sim time (seconds)
     double          execTime;                   // Executive time (seconds)
