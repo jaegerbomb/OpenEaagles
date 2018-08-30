@@ -409,77 +409,77 @@ void Simulation::deleteData()
 //------------------------------------------------------------------------------
 void Simulation::reset()
 {
-   // ---
-   // Something old and something new ...
-   // ... We're going to create a new player list.
-   // ---
-   SPtr<Basic::PairStream> newList( new Basic::PairStream() );
-   newList->unref();  // 'newList' has it, so unref() from the 'new'
+   //// ---
+   //// Something old and something new ...
+   //// ... We're going to create a new player list.
+   //// ---
+   //SPtr<Basic::PairStream> newList( new Basic::PairStream() );
+   //newList->unref();  // 'newList' has it, so unref() from the 'new'
 
-   // ---
-   // Copy original players to the new list
-   // ---
-   {
-      if (origPlayers != 0) {
-         SPtr<Basic::PairStream> origPlayerList = origPlayers;
-         Basic::List::Item* item = origPlayerList->getFirstItem();
-         while (item != 0) {
-            Basic::Pair* pair = static_cast<Basic::Pair*>(item->getValue());
-            Player* ip = static_cast<Player*>(pair->object());
+   //// ---
+   //// Copy original players to the new list
+   //// ---
+   //{
+   //   if (origPlayers != 0) {
+   //      SPtr<Basic::PairStream> origPlayerList = origPlayers;
+   //      Basic::List::Item* item = origPlayerList->getFirstItem();
+   //      while (item != 0) {
+   //         Basic::Pair* pair = static_cast<Basic::Pair*>(item->getValue());
+   //         Player* ip = static_cast<Player*>(pair->object());
 
-            // reinstated the container pointer and player name
-            ip->container(this);
-            // set the name as the slot of the pair if the player doesn't already have a name
-            const Basic::Identifier* id = ip->getName();
-            if (id == nullptr) {
-               ip->setName(*pair->slot());
-            }
-            else if (id->isEmpty()) {
-               ip->setName(*pair->slot());
-            }
+   //         // reinstated the container pointer and player name
+   //         ip->container(this);
+   //         // set the name as the slot of the pair if the player doesn't already have a name
+   //         const Basic::Identifier* id = ip->getName();
+   //         if (id == nullptr) {
+   //            ip->setName(*pair->slot());
+   //         }
+   //         else if (id->isEmpty()) {
+   //            ip->setName(*pair->slot());
+   //         }
 
-            // Insert the player into the new list in sorted order
-            insertPlayerSort(pair, newList);
-            item = item->getNext();
-         }
-      }
-   }
+   //         // Insert the player into the new list in sorted order
+   //         insertPlayerSort(pair, newList);
+   //         item = item->getNext();
+   //      }
+   //   }
+   //}
 
-   // ---
-   // Copy the old networked players (IPlayers) to the new list
-   // ---
-   {
-      if (players != 0) {
-         SPtr<Basic::PairStream> origPlayerList = players;
-         Basic::List::Item* item = origPlayerList->getFirstItem();
-         while (item != 0) {
-            Basic::Pair* pair = static_cast<Basic::Pair*>(item->getValue());
-            Player* ip = static_cast<Player*>(pair->object());
-            if (ip->isNetworkedPlayer()) {
+   //// ---
+   //// Copy the old networked players (IPlayers) to the new list
+   //// ---
+   //{
+   //   if (players != 0) {
+   //      SPtr<Basic::PairStream> origPlayerList = players;
+   //      Basic::List::Item* item = origPlayerList->getFirstItem();
+   //      while (item != 0) {
+   //         Basic::Pair* pair = static_cast<Basic::Pair*>(item->getValue());
+   //         Player* ip = static_cast<Player*>(pair->object());
+   //         if (ip->isNetworkedPlayer()) {
 
-               // reinstated the container pointer and player name
-               ip->container(this);
-               // set the name as the slot of the pair if the player doesn't already have a name
-               const Basic::Identifier* id = ip->getName();
-               if (id == nullptr) {
-                  ip->setName(*pair->slot());
-               }
-               else if (id->isEmpty()) {
-                  ip->setName(*pair->slot());
-               }
+   //            // reinstated the container pointer and player name
+   //            ip->container(this);
+   //            // set the name as the slot of the pair if the player doesn't already have a name
+   //            const Basic::Identifier* id = ip->getName();
+   //            if (id == nullptr) {
+   //               ip->setName(*pair->slot());
+   //            }
+   //            else if (id->isEmpty()) {
+   //               ip->setName(*pair->slot());
+   //            }
 
-               // Insert the IPlayer into the new list in sorted order
-               insertPlayerSort(pair, newList);
-            }
-            item = item->getNext();
-         }
-      }
-   }
+   //            // Insert the IPlayer into the new list in sorted order
+   //            insertPlayerSort(pair, newList);
+   //         }
+   //         item = item->getNext();
+   //      }
+   //   }
+   //}
 
-   // ---
-   // Swap the lists
-   // ---
-   players = newList;
+   //// ---
+   //// Swap the lists
+   //// ---
+   //players = newList;
 
    // ---
    // First time resetting the terrain database will load the data
@@ -1376,14 +1376,15 @@ bool Simulation::setSlotPlayers(Basic::PairStream* const pl)
       }
 
       // Set the original player list pointer
-      origPlayers = pl;
+     // origPlayers = pl;
 
       // Create the new active player list
       Basic::PairStream* newList( new Basic::PairStream() );
 
       // Copy original players to the new list
-      if (origPlayers != 0) {
-         SPtr<Basic::PairStream> origPlayerList = origPlayers;
+      //if (origPlayers != 0) 
+	  {
+         SPtr<Basic::PairStream> origPlayerList = pl;
          Basic::List::Item* item = origPlayerList->getFirstItem();
          while (item != 0) {
             Basic::Pair* pair = static_cast<Basic::Pair*>(item->getValue());
@@ -1411,6 +1412,15 @@ void Simulation::updatePlayerList()
     // Do we need to swap player lists?  Only if a player
     // needs to be added or removed ---
     // ---
+
+	//std::cout << "PLAYER LIST SIZE = " << players->entries() << std::endl;
+	//Basic::List::Item* item2 = players->getFirstItem();
+	//while (item2 != 0) {
+	//	Basic::Pair* pair = static_cast<Basic::Pair*>(item2->getValue());
+	//	item2 = item2->getNext();
+	//	Player* p = static_cast<Player*>(pair->object());
+	//	std::cout << "REF COUNT = " << p->getRefCount() << std::endl;
+	//}
 
     // First check for new players ...
     bool yes = newPlayerQueue.isNotEmpty();
@@ -1507,11 +1517,13 @@ void Simulation::updatePlayerList()
          newPlayer = newPlayerQueue.get();
         }
 
+	  
+
         // ---
         // Swap the lists
         // ---
-        players = newList;
-    }
+	  players = newList;
+	}
 }
 
 //------------------------------------------------------------------------------
