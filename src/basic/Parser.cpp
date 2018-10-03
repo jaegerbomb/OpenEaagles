@@ -93,6 +93,7 @@
 #include "openeaagles/basic/PairStream.h"
 #include "openeaagles/basic/List.h"
 #include "Lexical.h"
+#include <sstream>
 
 static Eaagles::Basic::Object*  result;       // Result of all our work
 static Eaagles::Basic::Lexical* lex;          // Lex generator
@@ -132,7 +133,10 @@ static Eaagles::Basic::Object* gufParse(const char* formname, Eaagles::Basic::Pa
         // when we have a form name, use formFunc() to construct an
         // object of the form's class type.
         form = formFunc(formname);
-
+		 
+		// Lee - default output stream if we have errors
+		std::ofstream out("oeerrors.txt");
+	
        // set slots in our new object
        if (form != 0 && argList != 0) {
           Eaagles::Basic::List::Item* item = argList->getFirstItem();
@@ -143,6 +147,7 @@ static Eaagles::Basic::Object* gufParse(const char* formname, Eaagles::Basic::Pa
                   Eaagles::lcStrcpy(emsg,sizeof(emsg),"error while setting slot name: ");
                   Eaagles::lcStrcat(emsg,sizeof(emsg),*p->slot());
                   yyerror(emsg);
+				  out << emsg;
                }
                item = item->getNext();
           }
@@ -151,15 +156,23 @@ static Eaagles::Basic::Object* gufParse(const char* formname, Eaagles::Basic::Pa
              Eaagles::lcStrcpy(emsg,sizeof(emsg),"error: invalid form: ");
              Eaagles::lcStrcat(emsg,sizeof(emsg),formname);
              yyerror(emsg);
-          }
+			 out << emsg;
+		  }
        }
        else if (form == 0) {
           Eaagles::lcStrcpy(emsg,sizeof(emsg),"undefined form name: ");
           Eaagles::lcStrcat(emsg,sizeof(emsg),formname);
           yyerror(emsg);
-       }
+		  out << emsg;
+	   }
+
+	   out.close();
 
     }
+
+	if (form == nullptr) {
+		form = new Eaagles::Basic::Object();
+	}
     return form;
 }
 
@@ -1827,9 +1840,11 @@ Object* lcParser(const char* filename, ParserFormFunc func, int* numErrors)
     result = 0;
     errCount = 0;
 
-    // Open the file (someone else passed it through the preprocessor)
     std::fstream fin;
     fin.open(filename,std::ios::in);
+	if (fin.fail()) {
+		return new Eaagles::Basic::Object();
+	}
     lex = new Lexical(&fin);
 
     //yydebug = 1;
