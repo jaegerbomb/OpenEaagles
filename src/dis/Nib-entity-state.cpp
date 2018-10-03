@@ -588,53 +588,53 @@ bool Nib::entityStateManager(const LCreal curExecTime)
             }
          }
 
-         // Life forms appearance bits
-         if (player->isMajorType(Simulation::Player::LIFE_FORM)) {
-            const Simulation::LifeForm* lf = dynamic_cast<const Simulation::LifeForm*>(player);
-            if (lf != 0) {
-               // Health (aka damaged for other domains) same bits (3-4) - this is from the NIB, because it IS
-               // updated
-               // bits 5-8 compliance (not implemented)
-               // bits 9 - 11 unused
-               // bit 12 flashlight (not implemented)
-               // bits 13-15 unused
-               // bits 16 - 19 life form state
-               // data is from the player, because NIB doesn't have actions associated with it
-			   //unsigned int bits = 0;
-      //         if (lf->getActionState() == Simulation::LifeForm::UPRIGHT_STANDING) bits = 1;       // standing
-      //         else if (lf->getActionState() == Simulation::LifeForm::UPRIGHT_WALKING) bits = 2;   // walking
-      //         else if (lf->getActionState() == Simulation::LifeForm::UPRIGHT_RUNNING) bits = 3;   // running
-      //         else if (lf->getActionState() == Simulation::LifeForm::KNEELING) bits = 4;          // kneeling
-      //         else if (lf->getActionState() == Simulation::LifeForm::PRONE) bits = 5;             // prone
-      //         else if (lf->getActionState() == Simulation::LifeForm::CRAWLING) bits = 6;          // crawling
-      //         else if (lf->getActionState() == Simulation::LifeForm::SWIMMING) bits = 7;          // swimming
-      //         else if (lf->getActionState() == Simulation::LifeForm::PARACHUTING) bits = 8;       // parachuting
-      //         else if (lf->getActionState() == Simulation::LifeForm::JUMPING) bits = 9;           // jumping
-      //         else if (lf->getActionState() == Simulation::LifeForm::SITTING) bits = 10;          // sitting
-      //         else if (lf->getActionState() == Simulation::LifeForm::SQUATTING) bits = 11;        // squatting
-      //         else if (lf->getActionState() == Simulation::LifeForm::CROUCHING) bits = 12;        // crouching
-      //         else if (lf->getActionState() == Simulation::LifeForm::WADING) bits = 13;           // wading
-      //         else if (lf->getActionState() == Simulation::LifeForm::SURRENDER) bits = 14;        // surrender
-      //         else if (lf->getActionState() == Simulation::LifeForm::DETAINED) bits = 15;         // detained
-			   //std::cout << "BITS = " << bits << std::endl;
-			   //if (bits != 0) {
-				  // pdu->appearance |= (bits << 16);	
-			   //}
-			   // bit 20 will be used as custom appearance bits, and 24 will be used for weapons
-			   unsigned int pBits = player->getCustomAppearanceBits();
-			   pdu->appearance |= pBits;
+   //      // Life forms appearance bits
+   //      if (player->isMajorType(Simulation::Player::LIFE_FORM)) {
+   //         const Simulation::LifeForm* lf = dynamic_cast<const Simulation::LifeForm*>(player);
+   //         if (lf != 0) {
+   //            // Health (aka damaged for other domains) same bits (3-4) - this is from the NIB, because it IS
+   //            // updated
+   //            // bits 5-8 compliance (not implemented)
+   //            // bits 9 - 11 unused
+   //            // bit 12 flashlight (not implemented)
+   //            // bits 13-15 unused
+   //            // bits 16 - 19 life form state
+   //            // data is from the player, because NIB doesn't have actions associated with it
+			//   //unsigned int bits = 0;
+   //   //         if (lf->getActionState() == Simulation::LifeForm::UPRIGHT_STANDING) bits = 1;       // standing
+   //   //         else if (lf->getActionState() == Simulation::LifeForm::UPRIGHT_WALKING) bits = 2;   // walking
+   //   //         else if (lf->getActionState() == Simulation::LifeForm::UPRIGHT_RUNNING) bits = 3;   // running
+   //   //         else if (lf->getActionState() == Simulation::LifeForm::KNEELING) bits = 4;          // kneeling
+   //   //         else if (lf->getActionState() == Simulation::LifeForm::PRONE) bits = 5;             // prone
+   //   //         else if (lf->getActionState() == Simulation::LifeForm::CRAWLING) bits = 6;          // crawling
+   //   //         else if (lf->getActionState() == Simulation::LifeForm::SWIMMING) bits = 7;          // swimming
+   //   //         else if (lf->getActionState() == Simulation::LifeForm::PARACHUTING) bits = 8;       // parachuting
+   //   //         else if (lf->getActionState() == Simulation::LifeForm::JUMPING) bits = 9;           // jumping
+   //   //         else if (lf->getActionState() == Simulation::LifeForm::SITTING) bits = 10;          // sitting
+   //   //         else if (lf->getActionState() == Simulation::LifeForm::SQUATTING) bits = 11;        // squatting
+   //   //         else if (lf->getActionState() == Simulation::LifeForm::CROUCHING) bits = 12;        // crouching
+   //   //         else if (lf->getActionState() == Simulation::LifeForm::WADING) bits = 13;           // wading
+   //   //         else if (lf->getActionState() == Simulation::LifeForm::SURRENDER) bits = 14;        // surrender
+   //   //         else if (lf->getActionState() == Simulation::LifeForm::DETAINED) bits = 15;         // detained
+			//   //std::cout << "BITS = " << bits << std::endl;
+			//   //if (bits != 0) {
+			//	  // pdu->appearance |= (bits << 16);	
+			//   //}
+			//   // bit 20 will be used as custom appearance bits, and 24 will be used for weapons
+			//   unsigned int pBits = player->getCustomAppearanceBits();
+			//   pdu->appearance |= pBits;
 
-               // bit 21 frozen status (taken care of above)
-               // bits 24 - 25 weapon 1 (not implemented)
-               // bits 26-27 weapon 2 (N/I)
-               // bits 28-29
-            }
-			//std::cout << "APPEARANCE = " << pdu->appearance << std::endl;
-		 }
+   //            // bit 21 frozen status (taken care of above)
+   //            // bits 24 - 25 weapon 1 (not implemented)
+   //            // bits 26-27 weapon 2 (N/I)
+   //            // bits 28-29
+   //         }
+			////std::cout << "APPEARANCE = " << pdu->appearance << std::endl;
+		 //}
 
 
          // Common Non-life form appearance bits
-         else {
+         if (!player->isMajorType(Simulation::Player::LIFE_FORM)) {
 
             // Smoking?  (Bits 5-6) Standard (IST-CF-03-01, May 5, 2003)
             {
@@ -655,6 +655,9 @@ bool Nib::entityStateManager(const LCreal curExecTime)
             // Power plant status bit (just leave ON for now)
             pdu->appearance |= POWER_PLANT_BIT;
          }
+
+         unsigned int pBits = player->getCustomAppearanceBits();
+         pdu->appearance |= pBits;
       }
 
       // ---
