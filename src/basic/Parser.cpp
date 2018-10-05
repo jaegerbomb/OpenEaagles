@@ -133,10 +133,7 @@ static Eaagles::Basic::Object* gufParse(const char* formname, Eaagles::Basic::Pa
         // when we have a form name, use formFunc() to construct an
         // object of the form's class type.
         form = formFunc(formname);
-		 
-		// Lee - default output stream if we have errors
-		std::ofstream out("oeerrors.txt");
-	
+		 	
        // set slots in our new object
        if (form != 0 && argList != 0) {
           Eaagles::Basic::List::Item* item = argList->getFirstItem();
@@ -147,7 +144,6 @@ static Eaagles::Basic::Object* gufParse(const char* formname, Eaagles::Basic::Pa
                   Eaagles::lcStrcpy(emsg,sizeof(emsg),"error while setting slot name: ");
                   Eaagles::lcStrcat(emsg,sizeof(emsg),*p->slot());
                   yyerror(emsg);
-				  out << emsg;
                }
                item = item->getNext();
           }
@@ -156,18 +152,13 @@ static Eaagles::Basic::Object* gufParse(const char* formname, Eaagles::Basic::Pa
              Eaagles::lcStrcpy(emsg,sizeof(emsg),"error: invalid form: ");
              Eaagles::lcStrcat(emsg,sizeof(emsg),formname);
              yyerror(emsg);
-			 out << emsg;
 		  }
        }
        else if (form == 0) {
           Eaagles::lcStrcpy(emsg,sizeof(emsg),"undefined form name: ");
           Eaagles::lcStrcat(emsg,sizeof(emsg),formname);
           yyerror(emsg);
-		  out << emsg;
 	   }
-
-	   out.close();
-
     }
 
 	if (form == nullptr) {
