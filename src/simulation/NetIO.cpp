@@ -51,11 +51,11 @@ IMPLEMENT_ABSTRACT_SUBCLASS(NetIO,"NetIO")
 //------------------------------------------------------------------------------
 // Parameters
 //------------------------------------------------------------------------------
-const double NET_TIMEOUT          = 12.5;                //  seconds
-const double NET_UPDATE_RATE      = 5.0;                 //  seconds
-const double NET_THRESHOLD_MTR    = 3.0;                 //  meters
-const double NET_THRESHOLD_RAD    = (3.0 * PI/180.0);    //  radians
-const double NET_THRESHOLD_VEL    = 0.25;                // meters/second
+const LCreal NetIO::HRT_BEAT_MPLIER = 2.5;                                 //  seconds
+const LCreal NetIO::HRT_BEAT_TIMER = 5.0;                                  //  seconds
+const LCreal NetIO::DRA_POS_THRST_DFLT = 3.0;                              //  meters
+const LCreal NetIO::DRA_ORIENT_THRST_DFLT = (3.0 * Basic::Angle::D2RCC);   //  radians
+const LCreal NetIO::DRA_VEL_THRST_DFLT = 0.25;                             // meters/second
 
 //------------------------------------------------------------------------------
 // Slot table
@@ -125,12 +125,12 @@ NetIO::NetIO()
    netInitFail = false;
 
    // set the defaults
-   setMaxEntityRange(0);                       // no range filtering
-   setMaxTimeDR(NET_UPDATE_RATE);              //  (seconds)
-   setMaxPositionErr(NET_THRESHOLD_MTR);       //  (meters)
-   setMaxOrientationErr(NET_THRESHOLD_RAD);    //  (radians)
-   setMaxVelocityErr(NET_THRESHOLD_VEL);       //  (meters/second)
-   setMaxAge(NET_TIMEOUT);                     //  (seconds)
+   setMaxEntityRange(0);                        // no range filtering
+   setMaxTimeDR(HRT_BEAT_TIMER);                //  (seconds)
+   setMaxPositionErr(DRA_POS_THRST_DFLT);       //  (meters)
+   setMaxOrientationErr(DRA_ORIENT_THRST_DFLT); //  (radians)
+   setMaxVelocityErr(DRA_VEL_THRST_DFLT);       //  (meters/second)
+   setMaxAge(HRT_BEAT_TIMER * HRT_BEAT_MPLIER); //  (seconds)
 
    nInNibs = 0;
    nOutNibs = 0;

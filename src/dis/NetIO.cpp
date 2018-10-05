@@ -71,10 +71,6 @@ IMPLEMENT_SUBCLASS(NetIO,"DisNetIO")
 //------------------------------------------------------------------------------
 // Parameters
 //------------------------------------------------------------------------------
-static const LCreal HRT_BEAT_MPLIER       = 2.5;                                 //  Multiplier
-static const LCreal HRT_BEAT_TIMER        = 5;                                   //  seconds
-static const LCreal DRA_POS_THRST_DFLT    = 3.0;                                 //  meters
-static const LCreal DRA_ORIENT_THRST_DFLT = static_cast<LCreal>(3.0 * PI/180.0); //  radians
 
 // DISv7 default heartbeats
 static const LCreal HBT_PDU_EE          = 10;                           //  seconds

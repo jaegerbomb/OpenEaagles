@@ -162,6 +162,12 @@ public:
     //  Max number of new, outgoing players published per frame
     static const unsigned int MAX_NEW_OUTGOING = EAAGLES_CONFIG_MAX_NETIO_NEW_OUTGOING;
 
+    static const LCreal HRT_BEAT_MPLIER;
+    static const LCreal HRT_BEAT_TIMER;
+    static const LCreal DRA_POS_THRST_DFLT;
+    static const LCreal DRA_ORIENT_THRST_DFLT;
+    static const LCreal DRA_VEL_THRST_DFLT;
+
 public:
    NetIO();
 

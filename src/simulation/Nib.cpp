@@ -52,6 +52,7 @@ void Nib::initData()
    flames = 0.0;
    camouflage = 0;
    actionState = 0;
+   customBits = 0;
    detMsgSent = false;
 
    execTime = 0;
@@ -88,7 +89,6 @@ void Nib::initData()
       apartMslAttached[i] = false;
    }
    apartNumMissiles = 0;
-   lastVel = 0;
 }
 
 
@@ -122,6 +122,7 @@ void Nib::copyData(const Nib& org, const bool cc)
    flames = org.flames;
    camouflage = org.camouflage;
    actionState = org.actionState;
+   customBits = org.customBits;
    detMsgSent = org.detMsgSent;
 
    execTime = org.execTime;
@@ -410,6 +411,12 @@ bool Nib::setActionState(const unsigned int x)
    return true;
 }
 
+bool Nib::setCustomBits(const unsigned int x)
+{
+   customBits = x;
+   return true;
+}
+
 // Sets the detonation message sent flag
 bool Nib::setDetonationMessageSent(const bool flg)
 {
@@ -443,7 +450,6 @@ bool Nib::isPlayerStateUpdateRequired(const LCreal curExecTime)
    // 3) When we're a local player, check for one of the following ...
    // ---
    if ((result == UNSURE) && player->isLocalPlayer()) {
-
       //LCreal drTime = curExecTime - getTimeExec();
       SynchronizedState playerState = player->getSynchronizedState();
       LCreal drTime = static_cast<LCreal>(playerState.getTimeExec()) - getTimeExec();
@@ -465,8 +471,10 @@ bool Nib::isPlayerStateUpdateRequired(const LCreal curExecTime)
          (player->getDamage() != getDamage() ||
          player->getSmoke() != getSmoke() ||
          player->getFlames() != getFlames() ||
-         player->getCamouflageType() != getCamouflageType())
-         ) {
+         player->getCamouflageType() != getCamouflageType() ||
+         player->getCustomAppearanceBits() != getCustomBits())
+         )
+      {
          result = YES;
       }
 
@@ -507,25 +515,35 @@ bool Nib::isPlayerStateUpdateRequired(const LCreal curExecTime)
 
 
             // Check if any angle error is greater than the max error
-            errAngles[0] = lcAbs(lcAepcDeg(errAngles[0]));
-            if (errAngles[0] >= maxAngleErr) result = YES;
-
-            errAngles[1] = lcAbs(lcAepcDeg(errAngles[1]));
-            if (errAngles[1] >= maxAngleErr) result = YES;
-
-            errAngles[2] = lcAbs(lcAepcDeg(errAngles[2]));
-            if (errAngles[2] >= maxAngleErr) result = YES;
+            if (lcAbs(lcAepcDeg(errAngles[0])) >= maxAngleErr ||
+                lcAbs(lcAepcDeg(errAngles[1])) >= maxAngleErr ||
+                lcAbs(lcAepcDeg(errAngles[2])) >= maxAngleErr)
+            {
+               result = YES;
+            }
          }
       }
 
-      if (result == UNSURE && (player->isMajorType(Player::LIFE_FORM) || player->isMajorType(Player::GROUND_VEHICLE))) {
+      if (result == UNSURE &&
+         drNum >= FPW_DRM && drNum <= FVW_DRM && // drV0 has to be geoc
+         (player->isMajorType(Player::LIFE_FORM) || player->isMajorType(Player::GROUND_VEHICLE)))
+      {
+         const osg::Vec3d& v = playerState.getGeocVelocity();
          LCreal maxVelErr = getNetIO()->getMaxVelocityErr(this);
-         Eaagles::osg::Vec3d vel = playerState.getGeocVelocity();
-         LCreal currVel = vel.length();
-         if (fabs(currVel - lastVel) > maxVelErr) {
-            result = YES;
-            lastVel = currVel;
+
+         osg::Vec3d v1 = drV0;
+         if (drNum == RVW_DRM || drNum == FVW_DRM)
+         {
+            v1 += drA0 * drTime;
          }
+
+         if (v1 != v &&
+            (v1 * v <= 0.0 || // dot product, checks for start/stop
+            (v1 - v).length2() > (maxVelErr * maxVelErr)))
+         {
+            result = YES;
+         }
+
          const LifeForm* lf = dynamic_cast<const LifeForm*>(player);
          if (lf != 0) {
             if (result == UNSURE &&
@@ -718,6 +736,7 @@ void Nib::playerState2Nib()
       setSmoke( player->getSmoke() );
       setFlames( player->getFlames() );
       setCamouflageType( player->getCamouflageType() );
+      setCustomBits( player->getCustomAppearanceBits() );
       const LifeForm* lf = dynamic_cast<const LifeForm*>(player);
       if (lf != 0) setActionState(lf->getActionState());
       setSide( player->getSide() );

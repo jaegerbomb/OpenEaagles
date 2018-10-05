@@ -145,11 +145,13 @@ public:
    LCreal getFlames() const                       { return flames; }
    unsigned int getCamouflageType() const         { return camouflage; }
    unsigned int getActionState() const            { return actionState;  }
+   unsigned int getCustomBits() const             { return customBits; }
    virtual bool setDamage(const LCreal v); 
    virtual bool setSmoke(const LCreal v); 
    virtual bool setFlames(const LCreal v); 
    virtual bool setCamouflageType(const unsigned int v);
    virtual bool setActionState(const unsigned int x);
+   virtual bool setCustomBits(const unsigned int x);
 
    // Articulated Part: wing sweep angle change count
    unsigned int getAPartWingSweepCnt() const { return apartWingSweepCnt; } 
@@ -297,9 +299,9 @@ private:
    LCreal      damage;                 // Damage state from no damage(0.0) to destroyed (1.0)
    LCreal      smoking;                // Smoke state from no smoke (0.0) to maximum (1.0)
    LCreal      flames;                 // Flames state from no flames (0.0) to maximum (1.0)
-   LCreal      lastVel;                // last velocity from packet
    unsigned int camouflage;            // Camouflage type (0 is none)
    unsigned int actionState;           // For LifeForms (walking/running/etc...)
+   unsigned int customBits;            // custom appearance bits...
    bool        detMsgSent;             // True if detonation message was sent
 
    // Times
