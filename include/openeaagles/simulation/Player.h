@@ -420,13 +420,14 @@ public:
 
    // Lee - easy way to store enums for players type
    struct DISEnum {
-	   int kind;
-	   int domain;
-	   int country;
-	   int category;
-	   int subcategory;
-	   int specific;
-	   int extra;
+	   uint8_t kind;
+	   uint8_t domain;
+	   uint16_t country;
+	   uint8_t category;
+	   uint8_t subcategory;
+	   uint8_t specific;
+	   uint8_t extra;
+
 	   void operator =(const DISEnum& other) {
 		   kind = other.kind;
 		   domain = other.domain;
@@ -439,7 +440,7 @@ public:
    };
 
    DISEnum disEnumeration() const { return mDISEnum; }
-   void setDISEnum(DISEnum x);
+   void setDISEnum(const DISEnum & x);
 
 
    // ---

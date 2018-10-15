@@ -814,7 +814,7 @@ LCreal Player::getGrossWeight() const
    return 0.0;
 }
 
-void Player::setDISEnum(DISEnum x) 
+void Player::setDISEnum(const DISEnum & x) 
 {
 	mDISEnum = x;
 }
